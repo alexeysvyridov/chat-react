@@ -53,7 +53,7 @@ export const Register = () => {
                         </label>
                     </div>
                     <div className="create-account">
-                        <span>go to login</span>
+                        <span>Go to login </span>
                         <Link to="/login">
                             <span>login</span>
                         </Link>

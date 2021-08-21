@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-router-dom'
 import './App.scss';
 // import { Hello } from './components/hello';
 import { Login } from './components/Login/Login'
@@ -15,12 +15,9 @@ function App() {
       <Router>
 
         <Switch>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/register">
-            <Register />
-          </Route>
+          <Route path="/login" component={Login} />
+          <Route path="/register" component={Register} />
+          <Redirect from="*" to="/login" />
         </Switch>
       </Router>
       {/* <Hello /> */}
