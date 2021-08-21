@@ -1,5 +1,8 @@
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import './App.scss';
-import { Hello } from './components/hello';
+// import { Hello } from './components/hello';
+import { Login } from './components/Login/Login'
+import { Register } from './components/Register/Register';
 import io from 'socket.io-client'
 function App() {
   const socket = io();
@@ -9,7 +12,18 @@ function App() {
   })
   return (
     <div className="App">
-      <Hello />
+      <Router>
+
+        <Switch>
+          <Route path="/login">
+            <Login />
+          </Route>
+          <Route path="/register">
+            <Register />
+          </Route>
+        </Switch>
+      </Router>
+      {/* <Hello /> */}
     </div>
   );
 }

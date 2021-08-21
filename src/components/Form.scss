@@ -1,0 +1,33 @@
+.container-form {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: lightgray;
+    text-align: center;
+    input {
+        &:hover {
+            background-color: lightblue;
+        }
+        width: 230px;
+        border-radius: 30px;
+        text-align: center;
+        height: 40px;
+        border: 1px solid lightblue;
+    }
+    .mt-20 {
+        margin-top: 20px;
+    }
+    svg {
+        margin-right: 10px;
+    }
+    .submit-btn {
+        width: 100%;
+        input {
+            width: 250px;
+        }
+    }
+    .create-account {
+        margin: 15px 0px;
+    }
+}
