@@ -6,10 +6,10 @@ const server = http.createServer(app)
 const {Server} = require('socket.io')
 const io = new Server(server)
 const helloRoute = require('./routes/hello')
+const {MongoClient} = require('mongodb') 
+
 app.use('/api/', helloRoute.hello)
-// app.get('/', (req, res) => {
-//     res.sendFile(__dirname + '/index.html')
-// })
+
 
 io.on('connection', (socket) => {
     console.log('a user connected');
@@ -20,6 +20,20 @@ io.on('connection', (socket) => {
     })
 })
 
-server.listen(4000, () => {
-    console.log('listening port 4000')
+const PORT = process.env.PORT || 4000
+server.listen(PORT, () => {
+    console.log(`listening port ${PORT}`)
 })  
+
+async function main() {
+    const uri = 'mongodb+srv://alex:alex123@cluster0.js2ld.mongodb.net/test'
+    MongoClient.connect(uri, { useNewUrlParser: true })
+    .then(() => {
+        console.log('connected to DB was successfully')
+    })
+    .catch(err => {
+        console.error(err.stack)
+        process.exit(1)
+    })
+}
+main().catch(console.error)

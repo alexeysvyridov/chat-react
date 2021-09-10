@@ -7,9 +7,10 @@ import { PrivateRoute } from './hoc/PrivateRoute';
 import { Home } from './components/Home/Home';
 import { ROUTES } from './constants/constants';
 import { PublickRoute } from './hoc/PublickRoute';
+import { useTypeSelector } from './hooks/useTypeSelector';
 function App() {
   const socket = io();
-
+  const { isAuthenticated } = useTypeSelector(state => state.loginReducer)
   socket.on('chat message', (msg) => {
     window.scrollTo(0, document.body.scrollHeight)
   })
@@ -20,20 +21,20 @@ function App() {
           <PrivateRoute
             path={ROUTES.HOME}
             component={Home}
-            isAuthenticated={false}
+            isAuthenticated={isAuthenticated}
             exact
           />
           <PublickRoute
             restricted
             path={ROUTES.LOGIN}
-            isAuthenticated={false}
+            isAuthenticated={isAuthenticated}
             component={Login}
             exact
           />
           <PublickRoute
             restricted
             path={ROUTES.REGISTER}
-            isAuthenticated={false}
+            isAuthenticated={isAuthenticated}
             component={Register}
             exact
           />

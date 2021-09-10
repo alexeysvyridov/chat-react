@@ -1,22 +1,28 @@
 import React, { useState, useEffect } from 'react'
 import { FaUserAlt, FaKey } from 'react-icons/fa'
+
 import { Link } from 'react-router-dom'
+import { useTypeDispatch } from '../../hooks/useTypeDispatch'
+import { useTypeSelector } from '../../hooks/useTypeSelector'
+
 import '../Form.scss'
+import { loginSuccess } from './redux/loginActionCreators'
 export const Login = () => {
     const [user, setUser] = useState({
         username: '',
         password: ''
     })
 
+    const loginReducer = useTypeSelector(state => state.loginReducer)
+    const dispatch = useTypeDispatch()
     const submit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        console.log(user);
+        dispatch(loginSuccess())
     }
     useEffect(() => {
-        console.log(user);
     }, [user.username, user.password])
+
     const handleSubmit = (input: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(input.target.name);
         setUser((prev) => {
             return {
                 ...prev,

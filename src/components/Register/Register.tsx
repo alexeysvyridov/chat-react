@@ -13,10 +13,8 @@ export const Register = () => {
         console.log(user);
     }
     useEffect(() => {
-        console.log(user);
     }, [user.username, user.password])
     const handleSubmit = (input: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(input.target.name);
         setUser((prev) => {
             return {
                 ...prev,
