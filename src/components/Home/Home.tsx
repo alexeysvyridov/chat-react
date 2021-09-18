@@ -3,6 +3,7 @@ import { TopBar } from './TopBar/TopBar'
 import { makeStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { UserList } from './UserList/UserList';
+import { Chat } from './Chat/Chat';
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -40,6 +41,9 @@ export const Home = (props: any) => {
                 </Grid>
                 <Grid className={classes.userList} item xs={4}>
                     <UserList />
+                </Grid>
+                <Grid className={classes.userList} item xs={8}>
+                    <Chat />
                 </Grid>
             </Grid>
         </div>
