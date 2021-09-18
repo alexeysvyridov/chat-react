@@ -8,3 +8,35 @@
     gap: 20px;
     padding-bottom: 15px;
 }
+.message-box.left-side {
+    justify-content: start;
+}
+.message-box.right-side {
+    justify-content: end;
+}
+.message-text {
+    background-color: #3d5afe;
+    color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    width: 350px;
+}
+.form-message {
+    width: 100%;
+    display: flex;
+}   
+
+.wrapperInput {
+    .form-message {
+        gap: 30px;
+    }
+    .input {
+        width: 100%;
+        min-width: 400px;
+        height: 50px;
+    }
+    .submit {
+        width: 250px;
+        height: 50px;
+    }
+}

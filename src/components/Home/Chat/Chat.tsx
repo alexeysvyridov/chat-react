@@ -28,10 +28,15 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center'
+
     },
     input: {
         width: '100%',
+        minWidth: '400px',
+        height: '50px'
+    },
+    submit: {
+        width: '250px',
         height: '50px'
     }
 }));
@@ -53,11 +58,14 @@ export const Chat: React.FC = () => {
 function MessageBar(): React.ReactElement {
     const classes = useStyles()
     return (
-        <div className={classes.wrapperInput}>
-            <input type="text"
-                className={classes.input}
-                placeholder="Message"
-            />
+        <div className="wrapperInput">
+            <form className="form-message">
+                <input type="text"
+                    className="input"
+                    placeholder="Message"
+                />
+                <input className="submit" type="submit" />
+            </form>
         </div>
     )
 }
@@ -66,19 +74,32 @@ function Messages(): React.ReactElement {
         <div className="wrapper-messages">
             {Users.map((user: any) => {
                 return (
-                    <div className="message-box" key={user.id}>
-                        <div className="message-top">
-                            <div className="message-box">
-                                <img className="meessage-image" src={`assets/${user.profilePicture}`} />
-                            </div>
-                        </div>
-                        <div className="message-text">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste facilis assumenda inventore aliquid, officiis iusto repudiandae doloremque at? Hic sint saepe consequatur ullam quidem pariatur nesciunt odit ratione molestiae ad.
-                        </div>
-                    </div>
+                    <Message
+                        key={user.id}
+                        own
+                        user={user}
+                    />
                 )
             })}
         </div>
 
+    )
+}
+
+function Message({ own, user }: any) {
+    return (
+        <div className={`message-box ${own ? 'left-side' : 'right-side'}`} key={user.id}>
+            <div className="message-top">
+                <div className="message-box">
+                    <img className="meessage-image" src={`assets/${user.profilePicture}`} />
+                </div>
+            </div>
+            <div className="message-text">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste facilis assumenda inventore aliquid, officiis iusto repudiandae doloremque at? Hic sint saepe consequatur ullam quidem pariatur nesciunt odit ratione molestiae ad.
+            </div>
+            <div className="chat-online">
+                online
+            </div>
+        </div>
     )
 }
