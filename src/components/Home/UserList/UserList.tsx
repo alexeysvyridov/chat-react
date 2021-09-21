@@ -21,7 +21,7 @@ function User({ user }: any) {
     return (
         <div className="user-container">
             <div className="user-box">
-                <img className="user-image" src={`assets/${user.profilePicture}`} />
+                <img className="user-image" src={`assets/images/${user.profilePicture}`} />
                 <div className="user-name">
                     {user.username}
                 </div>

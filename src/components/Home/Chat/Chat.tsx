@@ -91,7 +91,7 @@ function Message({ own, user }: any) {
         <div className={`message-box ${own ? 'left-side' : 'right-side'}`} key={user.id}>
             <div className="message-top">
                 <div className="message-box">
-                    <img className="meessage-image" src={`assets/${user.profilePicture}`} />
+                    <img className="meessage-image" src={`assets/images/${user.profilePicture}`} />
                 </div>
             </div>
             <div className="message-text">
