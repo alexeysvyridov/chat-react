@@ -1,4 +1,21 @@
-.list-wrapper {
+.list-container {
     min-width: 255px;
     max-width: 100%;
+    .user-container {
+        padding: 10px 20px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        .user-box {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+            .user-image {
+                height: 50px;
+                width: 50px;
+                border-radius: 50%;
+            }
+        }
+    }
 }

@@ -2,14 +2,20 @@ const express = require('express')
 const app = express()
 const http = require('http')
 const server = http.createServer(app)
- 
+const path = require('path') 
 const {Server} = require('socket.io')
 const io = new Server(server)
-const helloRoute = require('./routes/hello')
-const {MongoClient} = require('mongodb') 
-
-app.use('/api/', helloRoute.hello)
-
+const mongoose = require('mongoose')
+const conversations = require('./routes/conversations')
+const messages = require('./routes/messages')
+const posts = require('./routes/posts')
+// const posts = require('./routes/posts')
+app.use("assets/images", express.static(path.join(__dirname, "public/assets/images")));
+// app.use('/api/posts', posts)
+app.use(express.json());
+app.use(express.urlencoded({
+  extended: true
+}));
 
 io.on('connection', (socket) => {
     console.log('a user connected');
@@ -20,14 +26,20 @@ io.on('connection', (socket) => {
     })
 })
 
+
+app.use('/api/conversations', conversations)
+app.use('/api/messages', messages)
+app.use('/api/posts', posts)
+
+
 const PORT = process.env.PORT || 4000
 server.listen(PORT, () => {
     console.log(`listening port ${PORT}`)
 })  
 
 async function main() {
-    const uri = 'mongodb+srv://alex:alex123@cluster0.js2ld.mongodb.net/test'
-    MongoClient.connect(uri, { useNewUrlParser: true })
+    const uri = 'mongodb+srv://alex:alex123@cluster0.js2ld.mongodb.net/social'
+    mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log('connected to DB was successfully')
     })

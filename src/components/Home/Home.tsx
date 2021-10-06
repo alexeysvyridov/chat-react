@@ -44,6 +44,9 @@ export const Home = React.memo((props: any) => {
                 <Grid className={classes.userList} item xs={4}>
                     <UserList />
                 </Grid>
+                <Grid className={classes.userList} item xs={8}>
+                    <Chat />
+                </Grid>
             </Grid>
         </div>
     )
