@@ -38,7 +38,7 @@ server.listen(PORT, () => {
 })  
 
 async function main() {
-    const uri = 'mongodb+srv://alex:alex123@cluster0.js2ld.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+    const uri = 'mongodb+srv://alex:alex123@cluster0.js2ld.mongodb.net/social'
     mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log('connected to DB was successfully')
