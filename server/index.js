@@ -5,15 +5,17 @@ const server = http.createServer(app)
 const path = require('path') 
 const {Server} = require('socket.io')
 const io = new Server(server)
-const {MongoClient} = require('mongodb') 
+const mongoose = require('mongoose')
 const conversations = require('./routes/conversations')
 const messages = require('./routes/messages')
 const posts = require('./routes/posts')
 // const posts = require('./routes/posts')
 app.use("assets/images", express.static(path.join(__dirname, "public/assets/images")));
-
 // app.use('/api/posts', posts)
 app.use(express.json());
+app.use(express.urlencoded({
+  extended: true
+}));
 
 io.on('connection', (socket) => {
     console.log('a user connected');
@@ -36,8 +38,8 @@ server.listen(PORT, () => {
 })  
 
 async function main() {
-    const uri = 'mongodb+srv://alex:alex123@cluster0.js2ld.mongodb.net/test'
-    MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+    const uri = 'mongodb+srv://alex:alex123@cluster0.js2ld.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+    mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log('connected to DB was successfully')
     })

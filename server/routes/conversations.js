@@ -10,9 +10,9 @@ router.post('/', async (req,res) => {
 
     try {
         const saveConversation = await newConversation.save();
-        console.log(saveConversation)
         res.status(200).json(saveConversation)
     } catch (error) {
+      console.log(error)
         res.status(500).json(error)
     }
 })

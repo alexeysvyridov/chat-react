@@ -39,17 +39,17 @@ function App() {
       <div className="App">
         <Router>
           <Switch>
-            <PrivateRoute
-              path={ROUTES.HOME}
-              component={Home}
-              isAuthenticated={isAuthenticated}
-              exact
-            />
             <PublickRoute
               restricted
               path={ROUTES.LOGIN}
               isAuthenticated={isAuthenticated}
               component={Login}
+              exact
+            />
+            <PrivateRoute
+              path={ROUTES.HOME}
+              component={Home}
+              isAuthenticated={isAuthenticated}
               exact
             />
             <PublickRoute
