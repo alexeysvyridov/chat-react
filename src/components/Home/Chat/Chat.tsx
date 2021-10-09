@@ -1,8 +1,9 @@
-import React, { ReactElement, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core';
 import { Users } from '../../../dummyData'
 import chatService from '../../../service'
 import './Chat.scss'
+import { MessageInt } from '../../../ModelService/Models';
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -41,6 +42,8 @@ const useStyles = makeStyles((theme) => ({
         height: '50px'
     }
 }));
+
+
 export const Chat: React.FC = () => {
     const classes = useStyles()
     return (
@@ -71,9 +74,14 @@ function MessageBar(): React.ReactElement {
     )
 }
 function Messages(): React.ReactElement {
-    // useEffect(() => {
-    //     chatService.getAllConversations()
-    // }, [])
+    const [messages, setMessages] = useState<MessageInt[]>([])
+    useEffect(() => {
+        chatService.getAllMessages()
+            .then((resp) => {
+                console.log(resp);
+                setMessages(resp)
+            })
+    }, [])
     return (
         <div className="wrapper-messages">
             {Users.map((user: any) => {

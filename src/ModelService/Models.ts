@@ -1,4 +1,4 @@
-export interface Conversation {
+export interface ConversationInt {
     _id:string;
     members: [];
     createdAt: string;
@@ -12,4 +12,14 @@ export interface UserInt {
     _id:string;
     username: string;
     password: string,
+}
+
+export interface MessageInt {
+    _id: string;
+    conversationId:string;
+    sender: string;
+    text: string;
+    createdAt: string;
+    updatedAt: string;
+    __v?:number;
 }

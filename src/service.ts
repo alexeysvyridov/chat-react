@@ -1,10 +1,8 @@
-import axios, { Axios, AxiosResponse } from 'axios'
-import { Conversation, UserInt } from './ModelService/Models'
-
+import axios, { AxiosResponse } from 'axios'
+import {MessageInt} from './ModelService/Models'
 
 class ChatService {
-    constructor() { }
-   async getAllConversations() {
+   async getAllConversations():Promise<any> {
        try {
            const res = await axios.get<AxiosResponse>(`api/conversations/615db7a8a145e5fafe06387e`)
            if(res.status === 200) {
@@ -14,12 +12,18 @@ class ChatService {
            console.log(error)
        }
     }
-   async getAllUsers() {
+   async getAllMessages():Promise<any> {
+       try {
+           const res = await axios.get<AxiosResponse>(`api/messages/`)
+            return res.data
+       } catch (error) {
+           console.log(error)
+       }
+    }
+   async getAllUsers():Promise<any> {
        try {
            const res = await axios.get<AxiosResponse>(`api/users/`)
-          if(res.status === 200) {
-              return res.data
-            }
+            return res.data
        } catch (error) {
            console.log(error)
        }
@@ -27,4 +31,4 @@ class ChatService {
 
 }
 
-export default new ChatService;
+export default new ChatService();
