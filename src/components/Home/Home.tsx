@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { UserList } from './UserList/UserList';
 import ChatService from '../../service';
+import { Chat } from './Chat/Chat';
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -32,9 +33,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 export const Home = React.memo((props: any) => {
     const classes = useStyles()
-    useEffect(() => {
-        ChatService.getAllConversations()
-    }, [])
     return (
         <div className={classes.root}>
             <Grid container>

@@ -1,6 +1,7 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core';
 import { Users } from '../../../dummyData'
+import chatService from '../../../service'
 import './Chat.scss'
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -70,6 +71,9 @@ function MessageBar(): React.ReactElement {
     )
 }
 function Messages(): React.ReactElement {
+    // useEffect(() => {
+    //     chatService.getAllConversations()
+    // }, [])
     return (
         <div className="wrapper-messages">
             {Users.map((user: any) => {
@@ -95,7 +99,7 @@ function Message({ own, user }: any) {
                 </div>
             </div>
             <div className="message-text">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste facilis assumenda inventore aliquid, officiis iusto repudiandae doloremque at? Hic sint saepe consequatur ullam quidem pariatur nesciunt odit ratione molestiae ad.
+                {user.message}
             </div>
             <div className="chat-online">
                 online

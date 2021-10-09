@@ -1,19 +1,25 @@
-import axios, { Axios } from 'axios'
+import axios, { Axios, AxiosResponse } from 'axios'
+import { Conversation, UserInt } from './ModelService/Models'
 
-interface Conversation {
-    _id:string;
-    members: [];
-    createdAt: string;
-    updatedAt: string;
 
-}
 class ChatService {
-    constructor() {
-    }
+    constructor() { }
    async getAllConversations() {
        try {
-           const res = await axios.get<Conversation>(`/conversations/${'6145d965a5128731d4ff84c4'}`)
-           console.log(res)
+           const res = await axios.get<AxiosResponse>(`api/conversations/615db7a8a145e5fafe06387e`)
+           if(res.status === 200) {
+              return res.data
+            }
+       } catch (error) {
+           console.log(error)
+       }
+    }
+   async getAllUsers() {
+       try {
+           const res = await axios.get<AxiosResponse>(`api/users/`)
+          if(res.status === 200) {
+              return res.data
+            }
        } catch (error) {
            console.log(error)
        }
