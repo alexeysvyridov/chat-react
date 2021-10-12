@@ -1,8 +1,9 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useEffect } from 'react'
 import { TopBar } from './TopBar/TopBar'
 import { makeStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { UserList } from './UserList/UserList';
+import ChatService from '../../service';
 import { Chat } from './Chat/Chat';
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -30,8 +31,7 @@ const useStyles = makeStyles((theme) => ({
         overflow: 'auto'
     }
 }));
-export const Home = (props: any) => {
-    console.log(props);
+export const Home = React.memo((props: any) => {
     const classes = useStyles()
     return (
         <div className={classes.root}>
@@ -48,4 +48,4 @@ export const Home = (props: any) => {
             </Grid>
         </div>
     )
-}
+})

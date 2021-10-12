@@ -13,11 +13,11 @@ const initialState:InitialState = {
 
 type actions = LoginSuccess | LoginFailur
 export const loginReducer = (state=initialState, action:actions) => {
-    console.log(action)
     switch (action.type) {
         case LOGIN_SUCCESS:{
             return {
                 ...state,
+                user: action.payload,
                 isAuthenticated: true
             }
         }

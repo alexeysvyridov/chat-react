@@ -9,6 +9,7 @@ const mongoose = require('mongoose')
 const conversations = require('./routes/conversations')
 const messages = require('./routes/messages')
 const posts = require('./routes/posts')
+const users = require('./routes/users')
 // const posts = require('./routes/posts')
 app.use("assets/images", express.static(path.join(__dirname, "public/assets/images")));
 // app.use('/api/posts', posts)
@@ -30,6 +31,7 @@ io.on('connection', (socket) => {
 app.use('/api/conversations', conversations)
 app.use('/api/messages', messages)
 app.use('/api/posts', posts)
+app.use('/api/users', users)
 
 
 const PORT = process.env.PORT || 4000
