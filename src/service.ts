@@ -1,19 +1,38 @@
-import axios, { Axios } from 'axios'
+import axios, { AxiosResponse } from 'axios'
+import { UserAuth } from './components/Login/redux/loginActionCreators'
+import {MessageInt} from './ModelService/Models'
 
-interface Conversation {
-    _id:string;
-    members: [];
-    createdAt: string;
-    updatedAt: string;
-
-}
 class ChatService {
-    constructor() {
-    }
-   async getAllConversations() {
+   async getAllConversations(id:string):Promise<any> {
        try {
-           const res = await axios.get<Conversation>(`/conversations/${'6145d965a5128731d4ff84c4'}`)
-           console.log(res)
+           const res = await axios.get<AxiosResponse>(`api/conversations/${id}`)
+           if(res.status === 200) {
+              return res.data
+            }
+       } catch (error) {
+           console.log(error)
+       }
+    }
+   async getAllMessages():Promise<any> {
+       try {
+           const res = await axios.get<AxiosResponse>(`api/messages/`)
+            return res.data
+       } catch (error) {
+           console.log(error)
+       }
+    }
+   async getAllUsers():Promise<any> {
+       try {
+           const res = await axios.get<AxiosResponse>(`api/users/`)
+            return res.data
+       } catch (error) {
+           console.log(error)
+       }
+    }
+   async loginAuth(user:UserAuth):Promise<any> {
+       try {
+           const res = await axios.get<AxiosResponse>(`api/users/`)
+            return res.data
        } catch (error) {
            console.log(error)
        }
@@ -21,4 +40,4 @@ class ChatService {
 
 }
 
-export default new ChatService;
+export default new ChatService();
