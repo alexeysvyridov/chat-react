@@ -4,6 +4,7 @@ import { Users } from '../../../dummyData'
 import chatService from '../../../service'
 import './Chat.scss'
 import { MessageInt } from '../../../ModelService/Models';
+import { useTypeSelector } from '../../../hooks/useTypeSelector';
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -46,10 +47,17 @@ const useStyles = makeStyles((theme) => ({
 
 export const Chat: React.FC = () => {
     const classes = useStyles()
+    const { user } = useTypeSelector(root => root.loginReducer);
+    useEffect(() => {
+        chatService.getAllConversations('id')
+            .then((resp) => {
+                console.log(resp);
+            })
+    }, [])
     return (
         <div className={classes.root}>
             <div className={classes.messages}>
-                <Messages />
+                <Messages user={user} />
             </div>
             <div className={classes.wrapperInput}>
                 <MessageBar />
@@ -73,15 +81,9 @@ function MessageBar(): React.ReactElement {
         </div>
     )
 }
-function Messages(): React.ReactElement {
-    const [messages, setMessages] = useState<MessageInt[]>([])
-    useEffect(() => {
-        chatService.getAllMessages()
-            .then((resp) => {
-                console.log(resp);
-                setMessages(resp)
-            })
-    }, [])
+function Messages({ user }: any): React.ReactElement {
+    const [messages, setMessages] = useState<MessageInt[]>([]);
+
     return (
         <div className="wrapper-messages">
             {Users.map((user: any) => {

@@ -17,7 +17,7 @@ export const Login = () => {
     const dispatch = useTypeDispatch()
     const submit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        dispatch(loginSuccess())
+        dispatch(loginSuccess(user))
     }
     useEffect(() => {
     }, [user.username, user.password])
