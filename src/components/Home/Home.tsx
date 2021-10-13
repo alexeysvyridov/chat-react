@@ -3,7 +3,6 @@ import { TopBar } from './TopBar/TopBar'
 import { makeStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { UserList } from './UserList/UserList';
-import ChatService from '../../service';
 import { Chat } from './Chat/Chat';
 const useStyles = makeStyles((theme) => ({
     root: {
