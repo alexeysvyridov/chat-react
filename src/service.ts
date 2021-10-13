@@ -42,7 +42,7 @@ class ChatService {
    loginAuth(user:UserAuth):any {
       return async (dispatch: Dispatch<LoginSuccess | LoginFailur>) => {
         try {
-            saveToStorage('auth',user)
+            saveToStorage('auth', {user, isAuthenticated: true})
             dispatch(loginSuccess(user))
         } catch (error) {
             console.log(error)

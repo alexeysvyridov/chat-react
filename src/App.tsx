@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-router-dom'
 import './App.scss';
 import { Login } from './components/Login/Login'
@@ -14,6 +15,10 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { MuiThemeProvider } from "@material-ui/core/styles";
 import createMuiTheme from "@material-ui/core/styles/createTheme";
+
+import { loadStorage } from './localStorage'
+import { useTypeDispatch } from './hooks/useTypeDispatch';
+import { loginSuccess } from './components/Login/redux/loginActionCreators';
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -29,10 +34,17 @@ const theme = createMuiTheme();
 function App() {
   const socket = io();
   const { isAuthenticated } = useTypeSelector(state => state.loginReducer)
+  const dispatch = useTypeDispatch()
   socket.on('chat message', (msg) => {
     window.scrollTo(0, document.body.scrollHeight)
   })
 
+  useEffect(() => {
+    let userAuth = loadStorage('auth')
+    if (!userAuth?.isAuthenticated) return
+    let user = loadStorage('auth')
+    dispatch(loginSuccess(user))
+  }, [])
 
   return (
     <MuiThemeProvider theme={theme}>
@@ -59,6 +71,7 @@ function App() {
               component={Register}
               exact
             />
+            <Redirect from="*" to="/login" />
           </Switch>
         </Router>
       </div>
