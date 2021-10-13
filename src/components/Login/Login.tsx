@@ -6,7 +6,8 @@ import { useTypeDispatch } from '../../hooks/useTypeDispatch'
 import { useTypeSelector } from '../../hooks/useTypeSelector'
 
 import '../Form.scss'
-import { loginSuccess } from './redux/loginActionCreators'
+import chatService from '../../service'
+
 export const Login = () => {
     const [user, setUser] = useState({
         username: '',
@@ -17,7 +18,7 @@ export const Login = () => {
     const dispatch = useTypeDispatch()
     const submit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        dispatch(loginSuccess(user))
+        dispatch(chatService.loginAuth(user))
     }
     useEffect(() => {
     }, [user.username, user.password])
