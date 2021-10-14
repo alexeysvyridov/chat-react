@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios'
 import { Dispatch } from 'react'
-import { loginFailur, LoginFailur, loginSuccess, LoginSuccess, UserAuth } from './components/Login/redux/loginActionCreators'
+import { loginFailur, LoginFailur, loginSuccess, LoginSuccess, SignOutInt, signOutAction, UserAuth } from './components/Login/redux/loginActionCreators'
 import { saveToStorage } from './localStorage'
 import {MessageInt} from './ModelService/Models'
 
@@ -40,16 +40,23 @@ class ChatService {
 //        }
 //     }
    loginAuth(user:UserAuth):any {
-      return async (dispatch: Dispatch<LoginSuccess | LoginFailur>) => {
-        try {
-            saveToStorage('auth', {user, isAuthenticated: true})
-            dispatch(loginSuccess(user))
-        } catch (error) {
-            console.log(error)
-            dispatch(loginFailur())
+        return async (dispatch: Dispatch<LoginSuccess | LoginFailur>) => {
+            try {
+                saveToStorage('auth', {user, isAuthenticated: true})
+                dispatch(loginSuccess(user))
+            } catch (error) {
+                console.log(error)
+                dispatch(loginFailur())
+            }
         }
-     }
-       }
+    }
+
+   signOutWrapper():any {
+        return (dispatch: Dispatch<SignOutInt>) => {
+          localStorage.clear()
+          dispatch(signOutAction())
+        }
+    }
 
 }
 
