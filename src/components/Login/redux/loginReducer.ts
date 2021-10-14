@@ -1,5 +1,5 @@
-import { LoginFailur, LoginSuccess } from "./loginActionCreators"
-import { LOGIN_FAILUR, LOGIN_SUCCESS } from "./loginTypes"
+import { LoginFailur, LoginSuccess, SignOutInt } from "./loginActionCreators"
+import { LOGIN_FAILUR, LOGIN_SUCCESS, SIGN_OUT } from "./loginTypes"
 
 interface InitialState {
     isAuthenticated: boolean,
@@ -11,7 +11,7 @@ const initialState:InitialState = {
     user: {}
 }
 
-type actions = LoginSuccess | LoginFailur
+type actions = LoginSuccess | LoginFailur | SignOutInt
 export const loginReducer = (state=initialState, action:actions) => {
     switch (action.type) {
         case LOGIN_SUCCESS:{
@@ -25,6 +25,13 @@ export const loginReducer = (state=initialState, action:actions) => {
             return {
                 ...state,
                 isAuthenticated: false
+            }
+        }
+        case SIGN_OUT:{
+            return {
+                ...state,
+                isAuthenticated: false,
+                user: {}
             }
         }
         default: return state
