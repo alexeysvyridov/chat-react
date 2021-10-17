@@ -4,6 +4,7 @@ import { LOGIN_FAILUR, LOGIN_SUCCESS, SIGN_OUT } from "./loginTypes"
 export interface UserAuth {
     username: string,
     password: string,
+    id: string;
 } 
 export interface LoginSuccess {
     type: typeof LOGIN_SUCCESS,

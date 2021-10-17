@@ -5,6 +5,8 @@ import chatService from '../../../service'
 import './Chat.scss'
 import { MessageInt } from '../../../ModelService/Models';
 import { useTypeSelector } from '../../../hooks/useTypeSelector';
+import { UserType } from '../../Login/redux/loginReducer'
+
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -47,9 +49,9 @@ const useStyles = makeStyles((theme) => ({
 
 export const Chat: React.FC = () => {
     const classes = useStyles()
-    const { user } = useTypeSelector(root => root.loginReducer);
+    const { user }: any = useTypeSelector(root => root.loginReducer);
     useEffect(() => {
-        chatService.getAllConversations('id')
+        chatService.getAllConversations(user.id)
             .then((resp) => {
                 console.log(resp);
             })

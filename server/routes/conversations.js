@@ -19,11 +19,11 @@ router.post('/', async (req,res) => {
 
 router.get("/:userId", async (req, res) => {
   try {
-    const conversation = await Conversation.find({
+    const conversation = await Conversation.find({conversations: {
       members:{
         $in: [req.params.userId]
       }
-    })
+    }})
     res.status(200).json(conversation)
   } catch (error) {
     res.status(500).json(error)
