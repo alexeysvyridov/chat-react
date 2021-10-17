@@ -11,7 +11,8 @@ import chatService from '../../service'
 export const Login = () => {
     const [user, setUser] = useState({
         username: '',
-        password: ''
+        password: '',
+        id: '615db7a8a145e5fafe06387e'
     })
 
     const loginReducer = useTypeSelector(state => state.loginReducer)
