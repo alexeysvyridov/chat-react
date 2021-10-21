@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core';
 import { Users } from '../../../dummyData'
-import chatService from '../../../service'
 import './Chat.scss'
-import { MessageInt } from '../../../ModelService/Models';
+import { INT_GetConversationFailur, INT_GetConversationSuccess, MessageInt } from '../../../ModelService/Models';
 import { useTypeSelector } from '../../../hooks/useTypeSelector';
-import { UserType } from '../../Login/redux/loginReducer'
+import { useTypeDispatch } from '../../../hooks/useTypeDispatch';
+import ChatService, { Actions } from '../../../service'
+import { ThunkDispatch } from 'redux-thunk';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -47,14 +48,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
+
 export const Chat: React.FC = () => {
     const classes = useStyles()
     const { user }: any = useTypeSelector(root => root.loginReducer);
+    const dispatch: ThunkDispatch<any, any, Actions> = useTypeDispatch()
     useEffect(() => {
-        chatService.getAllConversations(user.id)
-            .then((resp) => {
-                console.log(resp);
-            })
+        dispatch(ChatService.getAllConversations(user.id))
     }, [])
     return (
         <div className={classes.root}>

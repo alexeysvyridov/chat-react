@@ -1,24 +1,34 @@
 import axios, { AxiosResponse } from 'axios'
 import { Dispatch } from 'react'
+import { ThunkDispatch } from 'redux-thunk'
+import { getConversationsFailur, getConversationsSuccess } from './components/Home/Chat/redux/conversationActionCreators'
 import { loginFailur, LoginFailur, loginSuccess, LoginSuccess, SignOutInt, signOutAction, UserAuth } from './components/Login/redux/loginActionCreators'
 import { saveToStorage } from './localStorage'
-import {MessageInt} from './ModelService/Models'
+import {INT_GetConversationFailur, INT_GetConversationFetch, INT_GetConversationSuccess} from './ModelService/Models'
 
+
+export type Actions = INT_GetConversationSuccess | INT_GetConversationFailur;
 class ChatService {
-   async getAllConversations(id:string):Promise<any> {
-       try {
-           const res = await axios.get<AxiosResponse>(`api/conversations/${id}`)
-           if(res.status === 200) {
-              return res.data
-            }
-       } catch (error) {
+   getAllConversations(id:string) {
+      return async (dispatch:ThunkDispatch<any, any, Actions>) => {
+        try {
+           const res:AxiosResponse = await axios.get(`api/conversations/${id}`)
+           console.log(res.data)
+            dispatch(getConversationsSuccess(res.data))
+        } 
+        catch (error) {
            console.log(error)
-       }
+           dispatch(getConversationsFailur())
+        }
+        finally {
+
+        }
+      }
     }
    async getAllMessages():Promise<any> {
        try {
            const res = await axios.get<AxiosResponse>(`api/messages/`)
-            return res.data
+            
        } catch (error) {
            console.log(error)
        }
