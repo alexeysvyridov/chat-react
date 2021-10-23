@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Redirect } from 'react-router-dom'
 import './App.scss';
 import { Login } from './components/Login/Login'
 import { Register } from './components/Register/Register';
-import io from 'socket.io-client'
+
 import { PrivateRoute } from './hoc/PrivateRoute';
 import { Home } from './components/Home/Home';
 import { ROUTES } from './constants/constants';
@@ -19,19 +19,11 @@ import { loginSuccess } from './components/Login/redux/loginActionCreators';
 import { UserType } from './components/Login/redux/loginReducer';
 
 const theme = createMuiTheme();
-const socket = io();
+
 
 function App() {
   const { isAuthenticated } = useTypeSelector(state => state.loginReducer)
   const dispatch = useTypeDispatch()
-  useEffect(() => {
-    socket.on('chat message', (msg) => {
-      window.scrollTo(0, document.body.scrollHeight)
-    })
-    return () => {
-      socket.off()
-    }
-  }, [])
   useEffect(() => {
     let userAuth = loadStorage('auth')
     if (!userAuth?.isAuthenticated) return
