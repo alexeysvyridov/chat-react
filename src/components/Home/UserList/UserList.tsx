@@ -1,5 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { UserInt } from '../../../ModelService/Models';
 import chatService from '../../../service'
 
@@ -39,7 +38,7 @@ function User({ user }: any) {
     return (
         <div className="user-container">
             <div className="user-box">
-                <img className="user-image" src={`assets/images/${user.img}`} />
+                <img className="user-image" srcSet={`assets/images/${user.img}`} alt="user" />
                 <div className="user-name">
                     {user.username}
                 </div>

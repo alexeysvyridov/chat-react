@@ -1,4 +1,4 @@
-import {INT_GetConversationFailur, ConversationInt, INT_GetConversationSuccess, INT_GetConversationFetch} from '../../../../ModelService/Models'
+import {INT_GetConversationFailur, INT_GetConversationSuccess, INT_GetConversationFetch} from '../../../../ModelService/Models'
 import { GET_CONVERSATIONS_FAILUR, GET_CONVERSATIONS_SUCCESS, GET_CONVERSATION_FETCH } from './conversationTypes'
 
 interface InitialState  {

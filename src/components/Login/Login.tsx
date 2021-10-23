@@ -3,7 +3,6 @@ import { FaUserAlt, FaKey } from 'react-icons/fa'
 
 import { Link } from 'react-router-dom'
 import { useTypeDispatch } from '../../hooks/useTypeDispatch'
-import { useTypeSelector } from '../../hooks/useTypeSelector'
 
 import '../Form.scss'
 import chatService from '../../service'
@@ -15,7 +14,6 @@ export const Login = () => {
         id: '615db7a8a145e5fafe06387e'
     })
 
-    const loginReducer = useTypeSelector(state => state.loginReducer)
     const dispatch = useTypeDispatch()
     const submit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()

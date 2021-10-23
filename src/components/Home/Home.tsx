@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect } from 'react'
+import React from 'react'
 import { TopBar } from './TopBar/TopBar'
 import { makeStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';

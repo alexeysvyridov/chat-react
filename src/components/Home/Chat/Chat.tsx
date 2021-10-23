@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { makeStyles } from '@material-ui/core';
 import { Users } from '../../../dummyData'
 import './Chat.scss'
-import { INT_GetConversationFailur, INT_GetConversationSuccess, MessageInt } from '../../../ModelService/Models';
+// import { MessageInt } from '../../../ModelService/Models';
 import { useTypeSelector } from '../../../hooks/useTypeSelector';
 import { useTypeDispatch } from '../../../hooks/useTypeDispatch';
-import ChatService, { Actions } from '../../../service'
-import { ThunkDispatch } from 'redux-thunk';
+import ChatService from '../../../service'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -52,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
 export const Chat: React.FC = () => {
     const classes = useStyles()
     const { user }: any = useTypeSelector(root => root.loginReducer);
-    const dispatch: ThunkDispatch<any, any, Actions> = useTypeDispatch()
+    const dispatch = useTypeDispatch()
     useEffect(() => {
         dispatch(ChatService.getAllConversations(user.id))
     }, [])
@@ -70,7 +69,7 @@ export const Chat: React.FC = () => {
 
 
 function MessageBar(): React.ReactElement {
-    const classes = useStyles()
+    // const classes = useStyles()
     return (
         <div className="wrapperInput">
             <form className="form-message">
@@ -84,7 +83,7 @@ function MessageBar(): React.ReactElement {
     )
 }
 function Messages({ user }: any): React.ReactElement {
-    const [messages, setMessages] = useState<MessageInt[]>([]);
+    // const [messages, setMessages] = useState<MessageInt[]>([]);
 
     return (
         <div className="wrapper-messages">
