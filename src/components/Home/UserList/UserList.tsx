@@ -1,31 +1,45 @@
-import { useEffect, useState } from 'react'
-import { UserInt } from '../../../ModelService/Models';
+import axios from 'axios';
+import { memo, useEffect, useState } from 'react'
+import { useTypeSelector } from '../../../hooks/useTypeSelector';
+import { ConversationInt, UserInt } from '../../../ModelService/Models';
 import chatService from '../../../service'
 
 import './UserList.scss';
-type TUsers = UserInt[];
-export const UserList = () => {
-    const [users, setUsers] = useState<TUsers>([])
+
+export const UserList: React.FC = () => {
+    const [users, setUsers] = useState<UserInt[]>([])
+    const { conversations } = useTypeSelector(root => root.conversationReducer)
+    const [activeTab, setActiveTab] = useState<string>('')
+    const { user }: any = useTypeSelector(root => root.loginReducer);
+    const getUserHandler = (_id: string) => {
+        setActiveTab(_id)
+    }
+
     useEffect(() => {
         function getUsers() {
-            chatService.getAllUsers()
-                .then((res: any): void => {
-                    setUsers(res)
-                })
+            chatService.getAllConversations(user._id)
         }
         getUsers()
     }, [])
 
-    if (users && users.length === 0) {
+    if (conversations && conversations.length === 0) {
         return <h1>no data</h1>
     }
+
     return (
         <div className="list-container">
             <ul className="list-users">
-                {users.map(user => {
+                {conversations && conversations.map((conversation) => {
                     return (
-                        <li key={user._id}>
-                            <User user={user} />
+                        <li
+                            key={conversation._id}
+                        >
+                            <User
+                                conversation={conversation}
+                                curUser={user}
+                                onGetUser={getUserHandler}
+                                activeTab={activeTab}
+                            />
                         </li>
                     )
                 })}
@@ -34,15 +48,38 @@ export const UserList = () => {
     )
 }
 
-function User({ user }: any) {
+interface UserComponent {
+    curUser: UserInt;
+    onGetUser: (_id: string) => void;
+    activeTab: string;
+    conversation: ConversationInt;
+}
+
+const User = memo(({ curUser, onGetUser, activeTab, conversation }: UserComponent): any => {
+    useEffect(() => {
+        console.log(conversation)
+        // const friendId = conversation.members.find((m: any) => m !== curUser._id)
+        // const getUser = async () => {
+        //     try {
+        //         const res = await axios.get('/users?userId=' + friendId)
+        //         console.log(res)
+        //     } catch (error) {
+        //         console.log(error)
+        //     }
+        // }
+        // getUser()
+    }, [conversation])
     return (
-        <div className="user-container">
-            <div className="user-box">
-                <img className="user-image" srcSet={`assets/images/${user.img}`} alt="user" />
-                <div className="user-name">
-                    {user.username}
-                </div>
+        <div className="user-container"
+            onClick={() => {
+                onGetUser(conversation._id)
+            }}>
+            <div className={`user-box ${activeTab === conversation._id ? 'active-tab' : ''}`}>
+                <img className="user-image" src={`assets/images/${conversation.img}`} alt="user" />
+                {/* <div className="user-name">
+                    {conversation.username}
+                </div> */}
             </div>
         </div>
     )
-}
+})

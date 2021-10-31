@@ -10,6 +10,8 @@ const conversations = require('./routes/conversations')
 const messages = require('./routes/messages')
 const posts = require('./routes/posts')
 const users = require('./routes/users')
+const NEW_CHAT_MESSAGE_EVENT = 'NEW_CHAT_MESSAGE_EVENT';
+
 // const posts = require('./routes/posts')
 app.use("assets/images", express.static(path.join(__dirname, "public/assets/images")));
 // app.use('/api/posts', posts)
@@ -18,12 +20,22 @@ app.use(express.urlencoded({
   extended: true
 }));
 
+const PORT = process.env.PORT || 4000
+server.listen(PORT, () => {
+    console.log(`listening port ${PORT}`)
+})  
+
 io.on('connection', (socket) => {
     console.log('a user connected');
 
-    socket.on('chat message', (msg) => {
-        console.log(`message: ${msg}`)
-        io.emit('chat message', msg)
+    const {roomId} = socket.handshake.query;
+    socket.join(roomId)
+    socket.on(NEW_CHAT_MESSAGE_EVENT, (data) => {
+        io.in(roomId).emit(NEW_CHAT_MESSAGE_EVENT, data)
+    })
+
+    socket.on('disconnect', () => {
+        socket.leave(roomId)
     })
 })
 
@@ -34,10 +46,6 @@ app.use('/api/posts', posts)
 app.use('/api/users', users)
 
 
-const PORT = process.env.PORT || 4000
-server.listen(PORT, () => {
-    console.log(`listening port ${PORT}`)
-})  
 
 async function main() {
     const uri = 'mongodb+srv://alex:alex123@cluster0.js2ld.mongodb.net/social'

@@ -6,6 +6,7 @@ export interface ConversationInt {
     updatedAt: string;
     __v?: number;
     _id:string;
+    img?: string;
 }
 export type INT_GetConversationSuccess = {
     type: typeof GET_CONVERSATIONS_SUCCESS,
