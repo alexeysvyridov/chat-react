@@ -57,18 +57,18 @@ interface UserComponent {
 
 const User = memo(({ curUser, onGetUser, activeTab, conversation }: UserComponent): any => {
     useEffect(() => {
-        console.log(conversation)
-        // const friendId = conversation.members.find((m: any) => m !== curUser._id)
-        // const getUser = async () => {
-        //     try {
-        //         const res = await axios.get('/users?userId=' + friendId)
-        //         console.log(res)
-        //     } catch (error) {
-        //         console.log(error)
-        //     }
-        // }
-        // getUser()
-    }, [conversation])
+        const friendId = conversation.members.find((m: any) => m !== curUser._id)
+        console.log(friendId)
+        const getUser = async () => {
+            try {
+                const res = await axios.get('/api/users?userId=' + friendId)
+                console.log(res)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        getUser()
+    }, [conversation, curUser])
     return (
         <div className="user-container"
             onClick={() => {
