@@ -36,6 +36,7 @@ export interface MessageInt {
     createdAt: string;
     updatedAt: string;
     __v?:number;
+    img: string;
 }
 
 export type Int_GetMessagesSucces = {

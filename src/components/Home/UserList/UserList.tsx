@@ -9,8 +9,7 @@ import { setCurrentChat } from '../Chat/redux/conversationActionCreators';
 import './UserList.scss';
 
 export const UserList: React.FC = () => {
-    const [users, setUsers] = useState<UserInt[]>([])
-    const { conversations, currentChat } = useTypeSelector(root => root.conversationReducer)
+    const { conversations } = useTypeSelector(root => root.conversationReducer)
     const [activeTab, setActiveTab] = useState<string>('')
     const { user }: any = useTypeSelector(root => root.loginReducer);
     const dispatch = useTypeDispatch()
@@ -35,7 +34,10 @@ export const UserList: React.FC = () => {
                     return (
                         <li
                             key={conversation._id}
-                            onClick={() => setChat(conversation)}
+                            onClick={() => {
+                                console.log(conversation)
+                                setChat(conversation)
+                            }}
                         >
                             <User
                                 conversation={conversation}

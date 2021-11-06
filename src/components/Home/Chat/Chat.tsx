@@ -20,11 +20,10 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.text.secondary,
     },
     messages: {
-        height: '80vh',
-        maxHeight: '80vh',
         overflow: 'auto',
         overflowY: 'hidden',
-        padding: '20px 0px'
+        height: `calc(100% - 60px)`,
+        padding: '10px 0px'
     },
     MessageBar: {
         height: '20vh',
@@ -32,8 +31,6 @@ const useStyles = makeStyles((theme) => ({
     wrapperInput: {
         width: '100%',
         display: 'flex',
-        alignItems: 'center',
-
     },
     input: {
         width: '100%',
@@ -80,7 +77,6 @@ export const Chat: React.FC = () => {
 
 
 function MessageBar(): React.ReactElement {
-    // const classes = useStyles()
     return (
         <div className="wrapperInput">
             <form className="form-message">
@@ -94,29 +90,23 @@ function MessageBar(): React.ReactElement {
     )
 }
 function Messages(): React.ReactElement {
-    // const [messages, setMessages] = useState<MessageInt[]>([]);
-    const { user }: any = useTypeSelector(root => root.loginReducer);
-    const { currentChat } = useTypeSelector(root => root.conversationReducer);
-
     const dispatch = useTypeDispatch()
+    const { user }: any = useTypeSelector(root => root.loginReducer);
+    const { currentChat, messages } = useTypeSelector(root => root.conversationReducer);
+
     useEffect(() => {
-        console.log(currentChat)
         dispatch(ChatService.getAllMessages(currentChat._id))
-    }, [currentChat])
-    // useEffect(() => {
-    //     ChatService.getAllMessages(currentChat._id)
-    //         .then(messages => {
-    //             console.log(messages)
-    //         })
-    // }, [])
+    }, [currentChat]);
+
+    console.log(user)
     return (
         <div className="wrapper-messages">
-            {Users.map((user: any) => {
+            {messages.map((message: any) => {
                 return (
                     <Message
-                        key={user.id}
-                        own
-                        user={user}
+                        key={message._id}
+                        own={message.sender === user.id}
+                        user={message}
                     />
                 )
             })}
@@ -134,8 +124,9 @@ function Message({ own, user }: any) {
                 </div>
             </div>
             <div className="message-text">
-                {user.message}
+                {user.text}
             </div>
+            <div className="message-time">{user.createdAt}</div>
             <div className="chat-online">
                 online
             </div>
