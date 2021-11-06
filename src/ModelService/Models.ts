@@ -1,4 +1,4 @@
-import { GET_CONVERSATIONS_FAILUR, GET_CONVERSATIONS_SUCCESS, GET_CONVERSATION_FETCH } from "../components/Home/Chat/redux/conversationTypes";
+import { GET_CONVERSATIONS_FAILUR, GET_CONVERSATIONS_SUCCESS, GET_CONVERSATION_FETCH, GET_MESSAGES_FAILUR, GET_MESSAGES_SUCCESS } from "../components/Home/Chat/redux/conversationTypes";
 
 export interface ConversationInt {
     createdAt: string;
@@ -7,6 +7,7 @@ export interface ConversationInt {
     __v?: number;
     _id:string;
     img?: string;
+    username: string;
 }
 export type INT_GetConversationSuccess = {
     type: typeof GET_CONVERSATIONS_SUCCESS,
@@ -35,4 +36,12 @@ export interface MessageInt {
     createdAt: string;
     updatedAt: string;
     __v?:number;
+}
+
+export type Int_GetMessagesSucces = {
+    type: typeof GET_MESSAGES_SUCCESS,
+    payload: MessageInt[]
+}
+export type Int_GetMessagesFailur = {
+    type: typeof GET_MESSAGES_FAILUR,
 }

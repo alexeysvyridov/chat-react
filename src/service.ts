@@ -1,12 +1,12 @@
 import axios, { AxiosResponse } from 'axios'
 import { Dispatch } from 'react'
-import { getConversationsFailur, getConversationsSuccess } from './components/Home/Chat/redux/conversationActionCreators'
+import { getConversationsFailur, getConversationsSuccess, getMessagesFuilur, getMessagesSuccess } from './components/Home/Chat/redux/conversationActionCreators'
 import { loginFailur, LoginFailur, loginSuccess, LoginSuccess, SignOutInt, signOutAction, UserAuth } from './components/Login/redux/loginActionCreators'
 import { saveToStorage } from './localStorage'
-import {INT_GetConversationFailur, INT_GetConversationFetch, INT_GetConversationSuccess} from './ModelService/Models'
+import {Int_GetMessagesSucces, INT_GetConversationFailur, INT_GetConversationFetch, INT_GetConversationSuccess, Int_GetMessagesFailur} from './ModelService/Models'
 
 export type ActionsConversations = INT_GetConversationSuccess | INT_GetConversationFailur | INT_GetConversationFetch;
-
+export type ActionMessages = Int_GetMessagesSucces | Int_GetMessagesFailur
 class ChatService {
    getAllConversations(id:string):any{
       return async (dispatch:Dispatch<ActionsConversations>) => {
@@ -23,12 +23,16 @@ class ChatService {
         }
       }
     }
-   async getAllMessages():Promise<any> {
-       try {
-            await axios.get<AxiosResponse>(`api/messages/`)
-            
-       } catch (error) {
-           console.log(error)
+   getAllMessages(id:string):any {
+      return async (dispatch:Dispatch<ActionMessages>) => {
+        try {
+                let resp:AxiosResponse =  await axios.get(`api/messages/${id}`)
+                dispatch(getMessagesSuccess(resp.data))
+            } 
+        catch (error) {
+            console.log(error)
+            dispatch(getMessagesFuilur())
+        }
        }
     }
    async getAllUsers():Promise<any> {

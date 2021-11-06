@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core';
 import { Users } from '../../../dummyData'
 import './Chat.scss'
@@ -52,13 +52,24 @@ export const Chat: React.FC = () => {
     const classes = useStyles()
     const { user }: any = useTypeSelector(root => root.loginReducer);
     const dispatch = useTypeDispatch()
+    const { currentChat } = useTypeSelector(root => root.conversationReducer);
+
+
     useEffect(() => {
         dispatch(ChatService.getAllConversations(user.id))
     }, [])
+
+
     return (
         <div className={classes.root}>
             <div className={classes.messages}>
-                <Messages user={user} />
+                {currentChat ? (
+                    <>
+                        <Messages />
+                    </>
+                ) : (
+                    <span>no active chat</span>
+                )}
             </div>
             <div className={classes.wrapperInput}>
                 <MessageBar />
@@ -82,9 +93,22 @@ function MessageBar(): React.ReactElement {
         </div>
     )
 }
-function Messages({ user }: any): React.ReactElement {
+function Messages(): React.ReactElement {
     // const [messages, setMessages] = useState<MessageInt[]>([]);
+    const { user }: any = useTypeSelector(root => root.loginReducer);
+    const { currentChat } = useTypeSelector(root => root.conversationReducer);
 
+    const dispatch = useTypeDispatch()
+    useEffect(() => {
+        console.log(currentChat)
+        dispatch(ChatService.getAllMessages(currentChat._id))
+    }, [currentChat])
+    // useEffect(() => {
+    //     ChatService.getAllMessages(currentChat._id)
+    //         .then(messages => {
+    //             console.log(messages)
+    //         })
+    // }, [])
     return (
         <div className="wrapper-messages">
             {Users.map((user: any) => {
