@@ -1,12 +1,13 @@
 import axios, { AxiosResponse } from 'axios'
 import { Dispatch } from 'react'
-import { getConversationFetch, getConversationsFailur, getConversationsSuccess, getMessagesFuilur, getMessagesSuccess } from './components/Home/Chat/redux/conversationActionCreators'
+import { getConversationFetch, getConversationsFailur, getConversationsSuccess, getMessagesFuilur, getMessagesSuccess, sendNewMessageSuccess,  } from './components/Home/Chat/redux/conversationActionCreators'
 import { loginFailur, LoginFailur, loginSuccess, LoginSuccess, SignOutInt, signOutAction, UserAuth } from './components/Login/redux/loginActionCreators'
 import { saveToStorage } from './localStorage'
-import {Int_GetMessagesSucces, INT_GetConversationFailur, INT_GetConversationFetch, INT_GetConversationSuccess, Int_GetMessagesFailur} from './ModelService/Models'
+import {Int_GetMessagesSucces, INT_GetConversationFailur, INT_GetConversationFetch, INT_GetConversationSuccess, Int_GetMessagesFailur, INT_SendNewMessageSuccess} from './ModelService/Models'
 
 export type ActionsConversations = INT_GetConversationSuccess | INT_GetConversationFailur | INT_GetConversationFetch;
-export type ActionMessages = Int_GetMessagesSucces | Int_GetMessagesFailur | INT_GetConversationFetch
+export type ActionMessages = Int_GetMessagesSucces | Int_GetMessagesFailur | INT_GetConversationFetch;
+
 class ChatService {
    getAllConversations(id:string):any{
        return async (dispatch:Dispatch<ActionsConversations>) => {
@@ -38,6 +39,20 @@ class ChatService {
         }
        }
     }
+
+    sendNewMessage(message:any):any {
+        return async (dispatch:Dispatch<INT_SendNewMessageSuccess>) => {
+            try {
+                let res = await axios.post('/api/messages', message)
+                console.log(res)
+                dispatch(sendNewMessageSuccess(res.data))
+            }
+            catch(err) {
+                console.log(err)
+            }
+        }
+    } 
+
    async getAllUsers():Promise<any> {
        try {
            const res = await axios.get<AxiosResponse>(`api/users/`)
