@@ -17,7 +17,8 @@ export type INT_GetConversationFailur = {
     type: typeof GET_CONVERSATIONS_FAILUR
 }
 export interface INT_GetConversationFetch {
-   type: typeof GET_CONVERSATION_FETCH
+   type: typeof GET_CONVERSATION_FETCH,
+   payload: boolean
 }
 export interface UserInt {
     desc: string;

@@ -22,7 +22,7 @@ export const conversatiosReducer = (state=initialState, action:Actions) => {
         case GET_CONVERSATION_FETCH: {
             return {
                 ...state,
-                loading: true
+                loading: action.payload
             }
         }
         case GET_CONVERSATIONS_SUCCESS: {

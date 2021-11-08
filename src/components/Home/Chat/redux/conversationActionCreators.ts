@@ -10,9 +10,11 @@ export const getConversationsSuccess = (conversations:ConversationInt[]):INT_Get
 export const getConversationsFailur = ():INT_GetConversationFailur => ({
     type: GET_CONVERSATIONS_FAILUR
 })
-export const getConversationFetch = ():INT_GetConversationFetch => ({
-    type: GET_CONVERSATION_FETCH
+export const getConversationFetch = (bool:boolean):INT_GetConversationFetch => ({
+    type: GET_CONVERSATION_FETCH,
+    payload: bool
 })
+
 export const setCurrentChat = (chat:any):any => ({
     type: SET_CURRENT_CHAT,
     payload: chat 

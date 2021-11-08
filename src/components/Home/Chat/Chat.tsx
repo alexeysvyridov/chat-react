@@ -50,12 +50,9 @@ export const Chat: React.FC = () => {
     const { user }: any = useTypeSelector(root => root.loginReducer);
     const dispatch = useTypeDispatch()
     const { currentChat } = useTypeSelector(root => root.conversationReducer);
-
-
     useEffect(() => {
         dispatch(ChatService.getAllConversations(user.id))
-    }, [])
-
+    }, [user.id])
 
     return (
         <div className={classes.root}>
@@ -89,16 +86,19 @@ function MessageBar(): React.ReactElement {
         </div>
     )
 }
+
 function Messages(): React.ReactElement {
     const dispatch = useTypeDispatch()
     const { user }: any = useTypeSelector(root => root.loginReducer);
-    const { currentChat, messages } = useTypeSelector(root => root.conversationReducer);
+    const { currentChat, messages, loading } = useTypeSelector(root => root.conversationReducer);
 
     useEffect(() => {
         dispatch(ChatService.getAllMessages(currentChat._id))
-    }, [currentChat]);
+    }, [currentChat._id]);
 
-    console.log(user)
+    if (loading) {
+        return <h1>Please wait....</h1>
+    }
     return (
         <div className="wrapper-messages">
             {messages.map((message: any) => {
