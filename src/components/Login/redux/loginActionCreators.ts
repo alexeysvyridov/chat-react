@@ -1,9 +1,9 @@
-import { UserInt } from "../../../ModelService/Models"
-import { LOGIN_FAILUR, LOGIN_SUCCESS } from "./loginTypes"
+import { LOGIN_FAILUR, LOGIN_SUCCESS, SIGN_OUT } from "./loginTypes"
 
 export interface UserAuth {
     username: string,
     password: string,
+    id: string;
 } 
 export interface LoginSuccess {
     type: typeof LOGIN_SUCCESS,
@@ -24,3 +24,10 @@ export const loginFailur = ():LoginFailur => {
         type: LOGIN_FAILUR
     }
 }
+export interface SignOutInt {
+    type: typeof SIGN_OUT
+}
+
+export const signOutAction = ():SignOutInt => ({
+    type: SIGN_OUT
+})

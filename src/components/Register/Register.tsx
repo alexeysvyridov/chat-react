@@ -5,7 +5,8 @@ import '../Form.scss'
 export const Register = () => {
     const [user, setUser] = useState({
         username: '',
-        password: ''
+        password: '',
+        id: '615db7a8a145e5fafe06387e'
     })
 
     const submit = (e: React.FormEvent<HTMLFormElement>) => {

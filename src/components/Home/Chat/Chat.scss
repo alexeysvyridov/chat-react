@@ -1,3 +1,4 @@
+
 .meessage-image {
     height: 60px;
     width: 60px;
@@ -5,14 +6,20 @@
 }
 .message-box {
     display: flex;
+    flex-direction: column;
     gap: 20px;
-    padding-bottom: 15px;
+    margin-bottom: 15px;
+    .message-top {
+        display: flex;
+        align-items: center;
+    }
 }
+
 .message-box.left-side {
-    justify-content: start;
+    align-items:flex-start;
 }
 .message-box.right-side {
-    justify-content: end;
+    align-items:flex-end;
 }
 .message-text {
     background-color: #3d5afe;
