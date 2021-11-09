@@ -1,4 +1,3 @@
-import { UserInt } from "../../../ModelService/Models"
 import { LOGIN_FAILUR, LOGIN_SUCCESS, SIGN_OUT } from "./loginTypes"
 
 export interface UserAuth {

@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { makeStyles } from '@material-ui/core';
 import { Users } from '../../../dummyData'
-import chatService from '../../../service'
 import './Chat.scss'
-import { MessageInt } from '../../../ModelService/Models';
 import { useTypeSelector } from '../../../hooks/useTypeSelector';
-import { UserType } from '../../Login/redux/loginReducer'
+import { useTypeDispatch } from '../../../hooks/useTypeDispatch';
+import ChatService from '../../../service'
+import { UserInt } from '../../../ModelService/Models';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -20,11 +20,10 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.text.secondary,
     },
     messages: {
-        height: '80vh',
-        maxHeight: '80vh',
-        overflow: 'auto',
-        overflowY: 'hidden',
-        padding: '20px 0px'
+        overflow: 'scroll',
+        overflowX: 'hidden',
+        height: `calc(100% - 60px)`,
+        padding: '10px 0px'
     },
     MessageBar: {
         height: '20vh',
@@ -32,8 +31,6 @@ const useStyles = makeStyles((theme) => ({
     wrapperInput: {
         width: '100%',
         display: 'flex',
-        alignItems: 'center',
-
     },
     input: {
         width: '100%',
@@ -47,75 +44,120 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
+
 export const Chat: React.FC = () => {
     const classes = useStyles()
     const { user }: any = useTypeSelector(root => root.loginReducer);
+    const dispatch = useTypeDispatch()
+    const { currentChat, messages, loading } = useTypeSelector(root => root.conversationReducer);
     useEffect(() => {
-        chatService.getAllConversations(user.id)
-            .then((resp) => {
-                console.log(resp);
-            })
-    }, [])
+        dispatch(ChatService.getAllConversations(user.id))
+    }, [user.id])
+
     return (
         <div className={classes.root}>
             <div className={classes.messages}>
-                <Messages user={user} />
+                {currentChat != null ? (
+                    <>
+                        <Messages 
+                            currentChat={currentChat}
+                            messages={messages}
+                            loading={loading}
+                            user={user}
+                        />
+                    </>
+                ) : (
+                    <span>no active chat</span>
+                )}
             </div>
             <div className={classes.wrapperInput}>
-                <MessageBar />
+                <MessageBar user={user} currentChat={currentChat} />
             </div>
         </div>
     )
 }
 
 
-function MessageBar(): React.ReactElement {
-    const classes = useStyles()
+function MessageBar({ user, currentChat }: any): React.ReactElement {
+    const [value, setValue] = useState('');
+    const dispatch = useTypeDispatch()
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        let message = {
+            conversationId: user.id,
+            text: value,
+            sender: currentChat._id
+        }
+        dispatch(ChatService.sendNewMessage(message))
+
+    }
+    const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setValue(e.target.value)
+    }
     return (
         <div className="wrapperInput">
-            <form className="form-message">
+            <form className="form-message" onSubmit={handleSubmit}>
                 <input type="text"
                     className="input"
                     placeholder="Message"
+                    onChange={inputHandler}
+                    value={value}
                 />
                 <input className="submit" type="submit" />
             </form>
         </div>
     )
 }
-function Messages({ user }: any): React.ReactElement {
-    const [messages, setMessages] = useState<MessageInt[]>([]);
 
+function Messages({currentChat, messages, loading, user}:any): React.ReactElement {
+    const dispatch = useTypeDispatch()
+    const scrollRef = useRef<HTMLDivElement>(null)
+    
+    useEffect(() => {
+        dispatch(ChatService.getAllMessages(currentChat._id))
+    }, [currentChat._id]);
+
+    useEffect(() => {
+        setTimeout(() => {
+            scrollRef.current?.scrollIntoView({behavior:'smooth'})
+        }, 100)
+    }, [messages])
+
+    if (loading) {
+        return <h1>Please wait....</h1>
+    }
     return (
         <div className="wrapper-messages">
-            {Users.map((user: any) => {
+            {messages.map((message: any) => {
                 return (
-                    <Message
-                        key={user.id}
-                        own
-                        user={user}
-                    />
+                    <div ref={scrollRef} key={message._id}>
+                        <Message
+                            own={message.sender === user.id}
+                            user={message}
+                        />
+                    </div>
                 )
             })}
         </div>
-
     )
 }
 
 function Message({ own, user }: any) {
+
     return (
         <div className={`message-box ${own ? 'left-side' : 'right-side'}`} key={user.id}>
-            <div className="message-top">
-                <div className="message-box">
-                    <img className="meessage-image" src={`assets/images/${user.profilePicture}`} />
+                <div className="message-top">
+                    <div className="message-box">
+                        <img className="meessage-image" src="https://images.pexels.com/photos/3686769/pexels-photo-3686769.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500" />
+                    </div>
+                <div className="message-text">
+                    {user.text}
                 </div>
-            </div>
-            <div className="message-text">
-                {user.message}
-            </div>
-            <div className="chat-online">
-                online
-            </div>
+                </div>
+                <div className="message-time">{user.createdAt}</div>
+                {/* <div className="chat-online">
+                    online
+                </div> */}
         </div>
     )
 }

@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect } from 'react'
+import React from 'react'
 import { TopBar } from './TopBar/TopBar'
 import { makeStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     userList: {
         borderRight: '1px solid black',
         minHeight: '100%',
-        height: `calc(100vh - 60px)`,
+        height: `calc(100vh - 77px)`,
         overflow: 'auto'
     }
 }));
