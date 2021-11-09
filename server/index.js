@@ -28,13 +28,27 @@ server.listen(PORT, () => {
 })  
 let usersArr = [];
 const addUser = (userId, socketId) => {
-    !usersArr.some((user) =>  user.userId === userId) && users.push({userId, socketId})
-}
+    !usersArr.some((user) =>  user.userId === userId) && 
+     usersArr.push({userId, socketId})
+};
+
+const removeUser = (socketId) => {
+    usersArr = usersArr.filter(user => user.userId !== socketId)
+};
+
 io.on('connection', (socket) => {
     console.log('a user connected');
+    console.log(socket.id)
+
     socket.on("addUser", userId => {
         addUser(userId, socket.id)
         //send all users to client
+        io.emit("getUsers", usersArr)
+    })
+
+    socket.on("disconnect", () => {
+        console.log("a usr disconnected");
+        removeUser(socket.id)
         io.emit("getUsers", usersArr)
     })
 })

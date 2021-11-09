@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {io} from 'socket.io-client'
+import {io, Socket} from 'socket.io-client'
 import { makeStyles } from '@material-ui/core';
 import './Chat.scss'
 import { useTypeSelector } from '../../../hooks/useTypeSelector';
@@ -50,14 +50,19 @@ export const Chat: React.FC = () => {
     const { user }: any = useTypeSelector(root => root.loginReducer);
     const dispatch = useTypeDispatch()
     const { currentChat, messages, loading } = useTypeSelector(root => root.conversationReducer);
-    const socketRef = useRef(io("ws://localhost:5000"))
+    const socketRef = useRef<any>(Socket)
     useEffect(() => {
         dispatch(ChatService.getAllConversations(user.id))
     }, [user.id])
-
     useEffect(() => {
-       socketRef.current.emit("adduser", user.id)     
-    })
+        socketRef.current = io("ws://localhost:5000")
+    }, [])
+    useEffect(() => {
+       socketRef.current.emit("addUser", user.id)     
+       socketRef.current.on("getUsers", (users:any) => {
+           console.log(users)
+       })
+    },[])
     return (
         <div className={classes.root}>
             <div className={classes.messages}>
