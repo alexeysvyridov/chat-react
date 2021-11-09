@@ -36,16 +36,28 @@ const removeUser = (socketId) => {
     usersArr = usersArr.filter(user => user.userId !== socketId)
 };
 
+const getUser = (userId) => {
+    return usersArr.find(user => user.userId === userId)
+}
+
 io.on('connection', (socket) => {
     console.log('a user connected');
     console.log(socket.id)
-
+    //add
     socket.on("addUser", userId => {
         addUser(userId, socket.id)
         //send all users to client
         io.emit("getUsers", usersArr)
     })
-
+    //
+    socket.on("sendMessage", ({senderId, receiverId, text}) => {
+        const user = getUser(senderId)
+        io.to(user.socketId).emit("getMessage", {
+            senderId,
+            text,
+        })
+    })
+    //disconnect
     socket.on("disconnect", () => {
         console.log("a usr disconnected");
         removeUser(socket.id)

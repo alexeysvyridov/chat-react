@@ -63,6 +63,12 @@ export const Chat: React.FC = () => {
            console.log(users)
        })
     },[])
+
+    useEffect(() => {
+        socketRef.current.on("getMessage", (data:any) => {
+
+        })
+    })
     return (
         <div className={classes.root}>
             <div className={classes.messages}>
@@ -80,28 +86,33 @@ export const Chat: React.FC = () => {
                 )}
             </div>
             <div className={classes.wrapperInput}>
-                <MessageBar user={user} currentChat={currentChat} />
+                <MessageBar user={user} currentChat={currentChat} socketRef={socketRef}/>
             </div>
         </div>
     )
 }
 
 
-function MessageBar({ user, currentChat }: any): React.ReactElement {
-    const [value, setValue] = useState('');
+function MessageBar({ user, currentChat, socketRef }: any): React.ReactElement {
+    const [newMessage, setNewMessage] = useState('');
     const dispatch = useTypeDispatch()
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         let message = {
             conversationId: user.id,
-            text: value,
+            text: newMessage,
             sender: currentChat._id
         }
         dispatch(ChatService.sendNewMessage(message))
-
+        const receiverId = currentChat.members.find((member:string) => member !== user.id)
+        socketRef?.current.emit("sendMessage", {
+            senderId: user.id,
+            receiverId: receiverId,
+            text: newMessage
+        })
     }
     const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setValue(e.target.value)
+        setNewMessage(e.target.value)
     }
     return (
         <div className="wrapperInput">
@@ -110,7 +121,7 @@ function MessageBar({ user, currentChat }: any): React.ReactElement {
                     className="input"
                     placeholder="Message"
                     onChange={inputHandler}
-                    value={value}
+                    value={newMessage}
                 />
                 <input className="submit" type="submit" />
             </form>
