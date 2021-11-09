@@ -20,8 +20,8 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.text.secondary,
     },
     messages: {
-        overflow: 'auto',
-        overflowY: 'hidden',
+        overflow: 'scroll',
+        overflowX: 'hidden',
         height: `calc(100% - 60px)`,
         padding: '10px 0px'
     },
@@ -49,7 +49,7 @@ export const Chat: React.FC = () => {
     const classes = useStyles()
     const { user }: any = useTypeSelector(root => root.loginReducer);
     const dispatch = useTypeDispatch()
-    const { currentChat } = useTypeSelector(root => root.conversationReducer);
+    const { currentChat, messages, loading } = useTypeSelector(root => root.conversationReducer);
     useEffect(() => {
         dispatch(ChatService.getAllConversations(user.id))
     }, [user.id])
@@ -57,9 +57,14 @@ export const Chat: React.FC = () => {
     return (
         <div className={classes.root}>
             <div className={classes.messages}>
-                {currentChat ? (
+                {currentChat != null ? (
                     <>
-                        <Messages />
+                        <Messages 
+                            currentChat={currentChat}
+                            messages={messages}
+                            loading={loading}
+                            user={user}
+                        />
                     </>
                 ) : (
                     <span>no active chat</span>
@@ -104,14 +109,20 @@ function MessageBar({ user, currentChat }: any): React.ReactElement {
     )
 }
 
-function Messages(): React.ReactElement {
+function Messages({currentChat, messages, loading, user}:any): React.ReactElement {
     const dispatch = useTypeDispatch()
-    const { user }: any = useTypeSelector(root => root.loginReducer);
-    const { currentChat, messages, loading } = useTypeSelector(root => root.conversationReducer);
     const scrollRef = useRef<HTMLDivElement>(null)
+    
     useEffect(() => {
         dispatch(ChatService.getAllMessages(currentChat._id))
     }, [currentChat._id]);
+
+    useEffect(() => {
+        setTimeout(() => {
+            scrollRef.current?.scrollIntoView({behavior:'smooth'})
+        }, 100)
+    }, [messages])
+
     if (loading) {
         return <h1>Please wait....</h1>
     }
@@ -135,18 +146,18 @@ function Message({ own, user }: any) {
 
     return (
         <div className={`message-box ${own ? 'left-side' : 'right-side'}`} key={user.id}>
-            <div className="message-top">
-                <div className="message-box">
-                    <img className="meessage-image" src="https://images.pexels.com/photos/3686769/pexels-photo-3686769.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500" />
+                <div className="message-top">
+                    <div className="message-box">
+                        <img className="meessage-image" src="https://images.pexels.com/photos/3686769/pexels-photo-3686769.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500" />
+                    </div>
+                <div className="message-text">
+                    {user.text}
                 </div>
-            </div>
-            <div className="message-text">
-                {user.text}
-            </div>
-            <div className="message-time">{user.createdAt}</div>
-            <div className="chat-online">
-                online
-            </div>
+                </div>
+                <div className="message-time">{user.createdAt}</div>
+                {/* <div className="chat-online">
+                    online
+                </div> */}
         </div>
     )
 }
