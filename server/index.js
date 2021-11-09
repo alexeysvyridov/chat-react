@@ -3,15 +3,17 @@ const app = express()
 const http = require('http')
 const server = http.createServer(app)
 const path = require('path') 
-const {Server} = require('socket.io')
-const io = new Server(server)
 const mongoose = require('mongoose')
 const conversations = require('./routes/conversations')
 const messages = require('./routes/messages')
 const posts = require('./routes/posts')
 const users = require('./routes/users')
 const NEW_CHAT_MESSAGE_EVENT = 'NEW_CHAT_MESSAGE_EVENT';
-
+const io = require('socket.io')(5000, {
+    cors:{
+        origin:"http://localhost:3000"
+    }
+})
 // const posts = require('./routes/posts')
 app.use("assets/images", express.static(path.join(__dirname, "public/assets/images")));
 // app.use('/api/posts', posts)
@@ -20,22 +22,20 @@ app.use(express.urlencoded({
   extended: true
 }));
 
-const PORT = process.env.PORT || 4000
+const PORT = process.env.PORT || 4000;
 server.listen(PORT, () => {
     console.log(`listening port ${PORT}`)
 })  
-
+let usersArr = [];
+const addUser = (userId, socketId) => {
+    !usersArr.some((user) =>  user.userId === userId) && users.push({userId, socketId})
+}
 io.on('connection', (socket) => {
     console.log('a user connected');
-
-    const {roomId} = socket.handshake.query;
-    socket.join(roomId)
-    socket.on(NEW_CHAT_MESSAGE_EVENT, (data) => {
-        io.in(roomId).emit(NEW_CHAT_MESSAGE_EVENT, data)
-    })
-
-    socket.on('disconnect', () => {
-        socket.leave(roomId)
+    socket.on("addUser", userId => {
+        addUser(userId, socket.id)
+        //send all users to client
+        io.emit("getUsers", usersArr)
     })
 })
 
