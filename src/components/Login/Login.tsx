@@ -50,6 +50,8 @@ export const Login = () => {
             id: "615db7a8a145e5fafe06387e"
         }
         dispatch(chatService.loginAuth(user))
+        reset({...values})
+        console.log(values)
     }
     // reset()
 
@@ -66,7 +68,7 @@ export const Login = () => {
         <div className="container-form">
             <div className="wrapper">
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <h1>Login</h1>
+                    <h1>Login to Chat</h1>
                     <div className="username">
                         <Controller
                             control={control}
@@ -84,7 +86,7 @@ export const Login = () => {
                                                 placeholder="Username"
                                             />
                                         </label>
-                                        {fieldState.error && <p className="error-form">ivalid username</p>}
+                                        {fieldState.error && <p className="error-form">{fieldState.error.message}</p>}
                                     </>
                                 )
                             }}
@@ -96,7 +98,6 @@ export const Login = () => {
                             name="password"
                             rules={rules.password}
                             render={({ field: { onChange, name }, fieldState }) => {
-                                console.log(fieldState)
                                 return (
                                     <>
                                         <label htmlFor="password">
@@ -105,7 +106,6 @@ export const Login = () => {
                                                 type="text"
                                                 name={name}
                                                 onChange={onChange}
-                                                name="password"
                                                 placeholder="Password"
                                             />
                                         </label>

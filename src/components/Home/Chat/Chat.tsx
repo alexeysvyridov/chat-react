@@ -1,11 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { makeStyles } from '@material-ui/core';
-import { Users } from '../../../dummyData'
 import './Chat.scss'
 import { useTypeSelector } from '../../../hooks/useTypeSelector';
 import { useTypeDispatch } from '../../../hooks/useTypeDispatch';
 import ChatService from '../../../service'
-import { UserInt } from '../../../ModelService/Models';
 
 const useStyles = makeStyles((theme) => ({
     root: {
