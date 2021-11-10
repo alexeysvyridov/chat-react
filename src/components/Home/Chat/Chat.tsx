@@ -1,11 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react';
+import {io, Socket} from 'socket.io-client'
 import { makeStyles } from '@material-ui/core';
-import { Users } from '../../../dummyData'
 import './Chat.scss'
 import { useTypeSelector } from '../../../hooks/useTypeSelector';
 import { useTypeDispatch } from '../../../hooks/useTypeDispatch';
 import ChatService from '../../../service'
 import { UserInt } from '../../../ModelService/Models';
+import { getMessagesSuccess, sendNewMessageSuccess } from './redux/conversationActionCreators';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -50,10 +51,33 @@ export const Chat: React.FC = () => {
     const { user }: any = useTypeSelector(root => root.loginReducer);
     const dispatch = useTypeDispatch()
     const { currentChat, messages, loading } = useTypeSelector(root => root.conversationReducer);
+    const socketRef = useRef<any>(null)
+    const [arrivalMessage,setArrivalMessage] = useState<any>(null)
     useEffect(() => {
         dispatch(ChatService.getAllConversations(user.id))
     }, [user.id])
+    useEffect(() => {
+        socketRef.current = io("ws://localhost:5000")
+        socketRef.current.on("getUsers", (data:any) => {
+           setArrivalMessage({
+               sender: data.senderid,
+               text: data.text,
+               createdAt: Date.now()
+           })
+        })
+        return() => {
+            socketRef.current.disconnect()
+        }
+    }, [])
+    useEffect(() => {
+       socketRef.current.emit("addUser", user.id)     
+    },[])
 
+    useEffect(() => {
+        arrivalMessage && currentChat?.members.includes(arrivalMessage.sender) &&
+        dispatch(getMessagesSuccess([...messages, arrivalMessage]))
+        // sendNewMessageSuccess((prev:any) => [...prev, arrivalMessage])
+    }, [arrivalMessage, currentChat])
     return (
         <div className={classes.root}>
             <div className={classes.messages}>
@@ -71,28 +95,33 @@ export const Chat: React.FC = () => {
                 )}
             </div>
             <div className={classes.wrapperInput}>
-                <MessageBar user={user} currentChat={currentChat} />
+                <MessageBar user={user} currentChat={currentChat} socketRef={socketRef}/>
             </div>
         </div>
     )
 }
 
 
-function MessageBar({ user, currentChat }: any): React.ReactElement {
-    const [value, setValue] = useState('');
+function MessageBar({ user, currentChat, socketRef }: any): React.ReactElement {
+    const [newMessage, setNewMessage] = useState('');
     const dispatch = useTypeDispatch()
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         let message = {
             conversationId: user.id,
-            text: value,
+            text: newMessage,
             sender: currentChat._id
         }
         dispatch(ChatService.sendNewMessage(message))
-
+        const receiverId = currentChat.members.find((member:string) => member !== user.id)
+        socketRef?.current.emit("sendMessage", {
+            senderId: user.id,
+            receiverId: receiverId,
+            text: newMessage
+        })
     }
     const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setValue(e.target.value)
+        setNewMessage(e.target.value)
     }
     return (
         <div className="wrapperInput">
@@ -101,7 +130,7 @@ function MessageBar({ user, currentChat }: any): React.ReactElement {
                     className="input"
                     placeholder="Message"
                     onChange={inputHandler}
-                    value={value}
+                    value={newMessage}
                 />
                 <input className="submit" type="submit" />
             </form>
