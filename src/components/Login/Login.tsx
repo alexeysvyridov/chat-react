@@ -50,8 +50,8 @@ export const Login = () => {
             id: "615db7a8a145e5fafe06387e"
         }
         dispatch(chatService.loginAuth(user))
-        reset({...values})
-        console.log(values)
+        // reset({...values})
+        // console.log(values)
     }
     // reset()
 
