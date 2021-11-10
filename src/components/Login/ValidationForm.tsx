@@ -1,23 +1,28 @@
+
 export interface DefaultsFields {
     username: string;
     password: string;
+}
+export interface DefaultsFieldsRegister {
+    username: string;
+    password: string;
+    email: string;
 }
 type ValueAndMessage = {
     value: number,
     message: string
 }
-type UsernameRule = {
-   username: {
-        required:boolean,
-        minLength: ValueAndMessage,
-        maxLength: ValueAndMessage
-   }
+type Pattern = {
+    value: RegExp,
+    message: string
 }
-type PasswordRule = {
-   password: {
-        required:boolean,
-        minLength: ValueAndMessage,
-        maxLength: ValueAndMessage
-   }
+export type Rule = {
+    required: boolean,
+    minLength: ValueAndMessage,
+    maxLength: ValueAndMessage
 }
-export type Rules = PasswordRule | UsernameRule
+
+export type RuleEmail = {
+    required: boolean,
+    pattern: Pattern
+}
