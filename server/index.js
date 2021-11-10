@@ -8,6 +8,7 @@ const conversations = require('./routes/conversations')
 const messages = require('./routes/messages')
 const posts = require('./routes/posts')
 const users = require('./routes/users')
+const register = require('./routes/register')
 const NEW_CHAT_MESSAGE_EVENT = 'NEW_CHAT_MESSAGE_EVENT';
 const io = require('socket.io')(5000, {
     cors:{
@@ -70,6 +71,7 @@ app.use('/api/conversations', conversations)
 app.use('/api/messages', messages)
 app.use('/api/posts', posts)
 app.use('/api/users', users)
+app.use('/api/register', register)
 
 
 

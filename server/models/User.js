@@ -13,6 +13,8 @@ const User = new mongoose.Schema({
     },
     img: String
 
-})
+},
+// {collection:""}
+)
 
 module.exports = mongoose.model("User", User);
