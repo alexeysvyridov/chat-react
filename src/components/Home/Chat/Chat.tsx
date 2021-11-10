@@ -6,7 +6,7 @@ import { useTypeSelector } from '../../../hooks/useTypeSelector';
 import { useTypeDispatch } from '../../../hooks/useTypeDispatch';
 import ChatService from '../../../service'
 import { UserInt } from '../../../ModelService/Models';
-import { sendNewMessageSuccess } from './redux/conversationActionCreators';
+import { getMessagesSuccess, sendNewMessageSuccess } from './redux/conversationActionCreators';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -51,7 +51,7 @@ export const Chat: React.FC = () => {
     const { user }: any = useTypeSelector(root => root.loginReducer);
     const dispatch = useTypeDispatch()
     const { currentChat, messages, loading } = useTypeSelector(root => root.conversationReducer);
-    const socketRef = useRef<any>(Socket)
+    const socketRef = useRef<any>(null)
     const [arrivalMessage,setArrivalMessage] = useState<any>(null)
     useEffect(() => {
         dispatch(ChatService.getAllConversations(user.id))
@@ -65,16 +65,19 @@ export const Chat: React.FC = () => {
                createdAt: Date.now()
            })
         })
+        return() => {
+            socketRef.current.disconnect()
+        }
     }, [])
     useEffect(() => {
        socketRef.current.emit("addUser", user.id)     
     },[])
 
     useEffect(() => {
-        arrivalMessage && currentChat?.members.includes(arrivalMessage.sender) 
-        
-        // sendNewMessageSuccess((prev) => [...prev, arrivalMessage])
-    }, [arrivalMessage])
+        arrivalMessage && currentChat?.members.includes(arrivalMessage.sender) &&
+        dispatch(getMessagesSuccess([...messages, arrivalMessage]))
+        // sendNewMessageSuccess((prev:any) => [...prev, arrivalMessage])
+    }, [arrivalMessage, currentChat])
     return (
         <div className={classes.root}>
             <div className={classes.messages}>
