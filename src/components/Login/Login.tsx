@@ -8,39 +8,12 @@ import '../Form.scss'
 import chatService from '../../service'
 import { UserAuth } from './redux/loginActionCreators'
 import { useForm, Controller, SubmitHandler } from 'react-hook-form'
-import { Rules, DefaultsFields } from './ValidationForm'
-let defaultField: DefaultsFields = {
-    username: "",
-    password: ""
-}
+import { DefaultsFields } from './ValidationForm'
+import { rules } from '../../constants/defaults'
 
-let rules: Rules = {
-    username: {
-        required: true,
-        minLength: {
-            value: 6,
-            message: "username to shot"
-        },
-        maxLength: {
-            value: 16,
-            message: "username to long"
-        }
-    },
-    password: {
-        required: true,
-        minLength: {
-            value: 6,
-            message: "password to shot"
-        },
-        maxLength: {
-            value: 16,
-            message: "password to long"
-        }
-    }
-}
 export const Login = () => {
 
-    const { handleSubmit, control, setValue, reset, formState: { errors } } = useForm<DefaultsFields>()
+    const { handleSubmit, control, reset } = useForm<DefaultsFields>()
 
     const dispatch = useTypeDispatch()
 
