@@ -9,6 +9,7 @@ const messages = require('./routes/messages')
 const posts = require('./routes/posts')
 const users = require('./routes/users')
 const register = require('./routes/register')
+require("dotenv").config();
 const NEW_CHAT_MESSAGE_EVENT = 'NEW_CHAT_MESSAGE_EVENT';
 const io = require('socket.io')(5000, {
     cors:{
