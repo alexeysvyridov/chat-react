@@ -9,6 +9,8 @@ const messages = require('./routes/messages')
 const posts = require('./routes/posts')
 const users = require('./routes/users')
 const register = require('./routes/register')
+const login = require('./routes/login')
+
 require("dotenv").config();
 const NEW_CHAT_MESSAGE_EVENT = 'NEW_CHAT_MESSAGE_EVENT';
 const io = require('socket.io')(5000, {
@@ -73,6 +75,7 @@ app.use('/api/messages', messages)
 app.use('/api/posts', posts)
 app.use('/api/users', users)
 app.use('/api/register', register)
+app.use('/api/login', login)
 
 
 
