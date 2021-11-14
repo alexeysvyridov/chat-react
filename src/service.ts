@@ -8,6 +8,17 @@ import {Int_GetMessagesSucces, INT_GetConversationFailur, INT_GetConversationFet
 export type ActionsConversations = INT_GetConversationSuccess | INT_GetConversationFailur | INT_GetConversationFetch;
 export type ActionMessages = Int_GetMessagesSucces | Int_GetMessagesFailur | INT_GetConversationFetch;
 
+interface ServerRespLogin {
+    data: ServerData
+}
+interface ServerData {
+    username: string, 
+    password: string, 
+    _id: string, 
+    email: string, 
+    img: string, 
+    _v?: number
+}
 class ChatService {
    getAllConversations(id:string):any{
        return async (dispatch:Dispatch<ActionsConversations>) => {
@@ -70,10 +81,22 @@ class ChatService {
 //        }
 //     }
    loginAuth(user:UserAuth):any {
+       let auth = {
+        email:user.username,
+        password:user.password
+       }
         return async (dispatch: Dispatch<LoginSuccess | LoginFailur>) => {
             try {
-                saveToStorage('auth', {...user, isAuthenticated: true})
-                dispatch(loginSuccess(user))
+                // let res = await axios.request<{email: string, password: string}>({
+                //     url: '/api/login', 
+                //     transformResponse:(r: any) => r.data,
+                //     method: 'post',
+                //     data: auth
+                // });
+                let res = await axios.post('/api/login', auth)
+                console.log(res)
+                // saveToStorage('auth', {...res.data, isAuthenticated: true})
+                // dispatch(loginSuccess(user))
             } catch (error) {
                 console.log(error)
                 dispatch(loginFailur())

@@ -17,7 +17,7 @@ export let rules: {
             message: "username to shot"
         },
         maxLength: {
-            value: 16,
+            value: 52,
             message: "username to long"
         }
     },
