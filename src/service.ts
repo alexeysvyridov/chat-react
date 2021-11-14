@@ -94,9 +94,15 @@ class ChatService {
                 //     data: auth
                 // });
                 let res = await axios.post('/api/login', auth)
-                console.log(res)
-                // saveToStorage('auth', {...res.data, isAuthenticated: true})
-                // dispatch(loginSuccess(user))
+                axios.create({
+                    baseURL: 'http://localhost:3000/',
+                    headers: {
+                        'Authorization': `Bearer ${res?.data?.token}`
+                    }
+                })
+
+                saveToStorage('auth', {...res.data, isAuthenticated: true})
+                dispatch(loginSuccess(user))
             } catch (error) {
                 console.log(error)
                 dispatch(loginFailur())
