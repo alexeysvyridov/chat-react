@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios'
 import { Dispatch } from 'react'
 import { getConversationFetch, getConversationsFailur, getConversationsSuccess, getMessagesFuilur, getMessagesSuccess, sendNewMessageSuccess,  } from './components/Home/Chat/redux/conversationActionCreators'
 import { loginFailur, LoginFailur, loginSuccess, LoginSuccess, SignOutInt, signOutAction, UserAuth } from './components/Login/redux/loginActionCreators'
-import { saveToStorage } from './localStorage'
+import StorageHelper from './localStorage'
 import {Int_GetMessagesSucces, INT_GetConversationFailur, INT_GetConversationFetch, INT_GetConversationSuccess, Int_GetMessagesFailur, INT_SendNewMessageSuccess} from './ModelService/Models'
 import ApiClient, { IApiClient } from './ApiClient'
 
@@ -107,7 +107,7 @@ class ChatService implements IChatService{
                    config.headers && ( config.headers["Authorization"] = `Bearer ${res.data.token}`)
                     return config
                 })
-                saveToStorage('auth', {...res.data, isAuthenticated: true})
+                StorageHelper.saveToStorage('auth', {...res.data, isAuthenticated: true})
                 dispatch(loginSuccess(user))
             } catch (error) {
                 console.log(error)
