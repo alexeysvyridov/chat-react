@@ -4,6 +4,7 @@ import { getConversationFetch, getConversationsFailur, getConversationsSuccess, 
 import { loginFailur, LoginFailur, loginSuccess, LoginSuccess, SignOutInt, signOutAction, UserAuth } from './components/Login/redux/loginActionCreators'
 import { saveToStorage } from './localStorage'
 import {Int_GetMessagesSucces, INT_GetConversationFailur, INT_GetConversationFetch, INT_GetConversationSuccess, Int_GetMessagesFailur, INT_SendNewMessageSuccess} from './ModelService/Models'
+import ApiClient, { IApiClient } from './ApiClient'
 
 export type ActionsConversations = INT_GetConversationSuccess | INT_GetConversationFailur | INT_GetConversationFetch;
 export type ActionMessages = Int_GetMessagesSucces | Int_GetMessagesFailur | INT_GetConversationFetch;
@@ -19,8 +20,24 @@ interface ServerData {
     img: string, 
     _v?: number
 }
-class ChatService {
-   getAllConversations(id:string):any{
+
+interface IChatService {
+    getAllConversations:(id: string) => Promise<any>;
+    getAllMessages: (id: string) => void;
+    sendNewMessage:(id: string) => Promise<any>;
+    getAllUsers: (message: any) => Promise<any>;
+    loginAuth: (user:UserAuth) => Promise<any>;
+    signOutWrapper: () => void;
+}
+
+class ChatService implements IChatService{
+   private apiClient: IApiClient;
+
+   constructor(ApiClient:any) {
+       this.apiClient = new ApiClient()
+   }
+
+   public getAllConversations(id:string):any{
        return async (dispatch:Dispatch<ActionsConversations>) => {
            try {
            const res:AxiosResponse = await axios.get(`api/conversations/${id}`)
@@ -35,7 +52,8 @@ class ChatService {
         }
       }
     }
-   getAllMessages(id:string):any {
+
+   public getAllMessages(id:string):any {
       return async (dispatch:Dispatch<ActionMessages>) => {
           try {
                 dispatch(getConversationFetch(true)) 
@@ -51,11 +69,10 @@ class ChatService {
        }
     }
 
-    sendNewMessage(message:any):any {
+    public sendNewMessage(message:any):any {
         return async (dispatch:Dispatch<INT_SendNewMessageSuccess>) => {
             try {
-                let res = await axios.post('/api/messages', message)
-                console.log(res)
+                let res:AxiosResponse = await axios.post('/api/messages', message)
                 dispatch(sendNewMessageSuccess(res.data))
             }
             catch(err) {
@@ -64,43 +81,32 @@ class ChatService {
         }
     } 
 
-   async getAllUsers():Promise<any> {
+  public async getAllUsers():Promise<any> {
        try {
-           const res = await axios.get<AxiosResponse>(`api/users/`)
+           const res:AxiosResponse = await axios.get(`api/users/`)
             return res.data
        } catch (error) {
            console.log(error)
        }
     }
-//    async loginAuth(user:UserAuth):Promise<any> {
-//        try {
-//            const res = await axios.get<AxiosResponse>(`api/users/`)
-//             return res.data
-//        } catch (error) {
-//            console.log(error)
-//        }
-//     }
-   loginAuth(user:UserAuth):any {
+
+//    private setToken(accessToken:string) {
+//         // this.apiClient = new this.apiClient(accessToken)
+//         console.log(this.apiClient)
+//    } 
+   
+   public loginAuth(user:UserAuth):any {
        let auth = {
         email:user.username,
         password:user.password
        }
         return async (dispatch: Dispatch<LoginSuccess | LoginFailur>) => {
             try {
-                // let res = await axios.request<{email: string, password: string}>({
-                //     url: '/api/login', 
-                //     transformResponse:(r: any) => r.data,
-                //     method: 'post',
-                //     data: auth
-                // });
-                let res = await axios.post('/api/login', auth)
-                axios.create({
-                    baseURL: 'http://localhost:3000/',
-                    headers: {
-                        'Authorization': `Bearer ${res?.data?.token}`
-                    }
+                let res = await axios.post<any>('/api/login', auth);
+                axios.interceptors.request.use(config => {
+                   config.headers && ( config.headers["Authorization"] = `Bearer ${res.data.token}`)
+                    return config
                 })
-
                 saveToStorage('auth', {...res.data, isAuthenticated: true})
                 dispatch(loginSuccess(user))
             } catch (error) {
@@ -110,7 +116,7 @@ class ChatService {
         }
     }
 
-   signOutWrapper():any {
+   public signOutWrapper():any {
         return (dispatch: Dispatch<SignOutInt>) => {
           localStorage.clear()
           dispatch(signOutAction())
@@ -119,4 +125,4 @@ class ChatService {
 
 }
 
-export default new ChatService();
+export default new ChatService(ApiClient);
