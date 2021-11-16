@@ -21,12 +21,13 @@ export interface INT_GetConversationFetch {
    payload: boolean
 }
 export interface UserInt {
-    desc: string;
+    desc?: string;
     img: string
     isAdmin: boolean;
     _id:string;
     username: string;
     password: string,
+    email: string
 }
 
 export interface MessageInt {

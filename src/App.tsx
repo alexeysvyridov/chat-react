@@ -13,7 +13,7 @@ import { useTypeSelector } from './hooks/useTypeSelector';
 import { MuiThemeProvider } from "@material-ui/core/styles";
 import createMuiTheme from "@material-ui/core/styles/createTheme";
 
-import { loadStorage } from './localStorage'
+import StorageHelper from './localStorage'
 import { useTypeDispatch } from './hooks/useTypeDispatch';
 import { loginSuccess } from './components/Login/redux/loginActionCreators';
 import { UserType } from './components/Login/redux/loginReducer';
@@ -25,9 +25,9 @@ function App() {
   const { isAuthenticated } = useTypeSelector(state => state.loginReducer)
   const dispatch = useTypeDispatch()
   useEffect(() => {
-    let userAuth = loadStorage('auth')
+    let userAuth = StorageHelper.loadStorage('auth')
     if (!userAuth?.isAuthenticated) return
-    let user: UserType = loadStorage('auth')
+    let user: UserType = StorageHelper.loadStorage('auth')
     dispatch(loginSuccess(user))
   }, [dispatch])
 

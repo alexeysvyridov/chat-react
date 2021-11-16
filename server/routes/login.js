@@ -20,8 +20,8 @@ router.post('/', async (req, res) => {
                 }
             )
             user.token = token;
-
-            res.status(200).json(user)
+            let {password, ...other} = user._doc    
+            res.status(200).json(other)
         }else {
             res.status(400).send("Invalid Credentials")
         }

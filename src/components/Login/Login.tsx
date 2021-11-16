@@ -18,11 +18,7 @@ export const Login = () => {
     const dispatch = useTypeDispatch()
 
     const onSubmit: SubmitHandler<DefaultsFields> = (values) => {
-        let user = {
-            ...values,
-            id: "615db7a8a145e5fafe06387e"
-        }
-        dispatch(chatService.loginAuth(user))
+        dispatch(chatService.loginAuth(values))
         // reset({...values})
         // console.log(values)
     }
