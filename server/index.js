@@ -8,6 +8,10 @@ const conversations = require('./routes/conversations')
 const messages = require('./routes/messages')
 const posts = require('./routes/posts')
 const users = require('./routes/users')
+const register = require('./routes/register')
+const login = require('./routes/login')
+
+require("dotenv").config();
 const NEW_CHAT_MESSAGE_EVENT = 'NEW_CHAT_MESSAGE_EVENT';
 const io = require('socket.io')(5000, {
     cors:{
@@ -42,7 +46,6 @@ const getUser = (userId) => {
 
 io.on('connection', (socket) => {
     console.log('a user connected');
-    console.log(socket.id)
     //add
     socket.on("addUser", userId => {
         addUser(userId, socket.id)
@@ -70,6 +73,8 @@ app.use('/api/conversations', conversations)
 app.use('/api/messages', messages)
 app.use('/api/posts', posts)
 app.use('/api/users', users)
+app.use('/api/register', register)
+app.use('/api/login', login)
 
 
 

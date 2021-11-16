@@ -2,8 +2,8 @@
 const router = require("express").Router();
 const Post = require("../models/Post");
 // const User = require("../models/User");
-
-router.get("/:id", async (req, res) => {
+const verifyToken = require('../middleware/auth')
+router.get("/:id",verifyToken, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
     res.status(200).json(post);

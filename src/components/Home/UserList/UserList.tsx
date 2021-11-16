@@ -35,7 +35,6 @@ export const UserList: React.FC = () => {
                         <li
                             key={conversation._id}
                             onClick={() => {
-                                console.log(conversation)
                                 setChat(conversation)
                             }}
                         >

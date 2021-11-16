@@ -54,8 +54,8 @@ export const Chat: React.FC = () => {
     const socketRef = useRef<any>(null)
     const [arrivalMessage,setArrivalMessage] = useState<any>(null)
     useEffect(() => {
-        dispatch(ChatService.getAllConversations(user.id))
-    }, [user.id])
+        dispatch(ChatService.getAllConversations(user._id))
+    }, [user._id])
     useEffect(() => {
         socketRef.current = io("ws://localhost:5000")
         socketRef.current.on("getUsers", (data:any) => {
@@ -70,7 +70,7 @@ export const Chat: React.FC = () => {
         }
     }, [])
     useEffect(() => {
-       socketRef.current.emit("addUser", user.id)     
+       socketRef.current.emit("addUser", user._id)     
     },[])
 
     useEffect(() => {
@@ -108,14 +108,14 @@ function MessageBar({ user, currentChat, socketRef }: any): React.ReactElement {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         let message = {
-            conversationId: user.id,
+            conversationId: user._id,
             text: newMessage,
             sender: currentChat._id
         }
         dispatch(ChatService.sendNewMessage(message))
-        const receiverId = currentChat.members.find((member:string) => member !== user.id)
+        const receiverId = currentChat.members.find((member:string) => member !== user._id)
         socketRef?.current.emit("sendMessage", {
-            senderId: user.id,
+            senderId: user._id,
             receiverId: receiverId,
             text: newMessage
         })
@@ -161,7 +161,7 @@ function Messages({currentChat, messages, loading, user}:any): React.ReactElemen
                 return (
                     <div ref={scrollRef} key={message._id}>
                         <Message
-                            own={message.sender === user.id}
+                            own={message.sender === user._id}
                             user={message}
                         />
                     </div>
@@ -174,7 +174,7 @@ function Messages({currentChat, messages, loading, user}:any): React.ReactElemen
 function Message({ own, user }: any) {
 
     return (
-        <div className={`message-box ${own ? 'left-side' : 'right-side'}`} key={user.id}>
+        <div className={`message-box ${own ? 'left-side' : 'right-side'}`} key={user._id}>
                 <div className="message-top">
                     <div className="message-box">
                         <img className="meessage-image" src="https://images.pexels.com/photos/3686769/pexels-photo-3686769.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500" />
