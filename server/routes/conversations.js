@@ -1,9 +1,9 @@
 const router = require('express').Router()
 
 const Conversation = require('../models/Conversation')
+const verifyToken = require('../middleware/auth')
 
-
-router.post('/', async (req,res) => {
+router.post('/',verifyToken, async (req,res) => {
     const newConversation = new Conversation({
         members:[req.body.senderId, req.body.receiverId]
     })
@@ -17,7 +17,7 @@ router.post('/', async (req,res) => {
     }
 })
 
-router.get("/:userId", async (req, res) => {
+router.get("/:userId",verifyToken, async (req, res) => {
   try {
     const conversation = await Conversation.find({conversations: {
       members:{

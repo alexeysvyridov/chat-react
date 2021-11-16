@@ -1,7 +1,7 @@
 const User = require('../models/User')
 
 const router = require('express').Router()
-
+const verifyToken = require('../middleware/auth')
 // router.get('/', (_, res) => {
 //     try {
 //         const usersMap = {}
@@ -15,7 +15,7 @@ const router = require('express').Router()
 //         res.status(500).json(error)
 //     }
 // })
-router.get('/', async (req, res) => {
+router.get('/',verifyToken, async (req, res) => {
     const userId = req.query.userId;
     const username = req.query.username;
 

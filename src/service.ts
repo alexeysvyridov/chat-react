@@ -5,10 +5,8 @@ import { loginFailur, LoginFailur, loginSuccess, LoginSuccess, SignOutInt, signO
 import StorageHelper from './localStorage'
 import {Int_GetMessagesSucces, INT_GetConversationFailur, INT_GetConversationFetch, INT_GetConversationSuccess, Int_GetMessagesFailur, INT_SendNewMessageSuccess} from './ModelService/Models'
 import ApiClient, { IApiClient } from './ApiClient'
-
 export type ActionsConversations = INT_GetConversationSuccess | INT_GetConversationFailur | INT_GetConversationFetch;
 export type ActionMessages = Int_GetMessagesSucces | Int_GetMessagesFailur | INT_GetConversationFetch;
-
 interface ServerRespLogin {
     data: ServerData
 }
@@ -30,6 +28,7 @@ interface IChatService {
     signOutWrapper: () => void;
 }
 
+
 class ChatService implements IChatService{
    private apiClient: IApiClient;
 
@@ -40,7 +39,7 @@ class ChatService implements IChatService{
    public getAllConversations(id:string):any{
        return async (dispatch:Dispatch<ActionsConversations>) => {
            try {
-           const res:AxiosResponse = await axios.get(`api/conversations/${id}`)
+           const res:AxiosResponse = await axios.get(`/api/conversations/${id}`)
             dispatch(getConversationsSuccess(res.data))
         } 
         catch (error) {
@@ -57,7 +56,7 @@ class ChatService implements IChatService{
       return async (dispatch:Dispatch<ActionMessages>) => {
           try {
                 dispatch(getConversationFetch(true)) 
-                let resp:AxiosResponse =  await axios.get(`api/messages/${id}`)
+                let resp:AxiosResponse =  await axios.get(`/api/messages/${id}`)
                 dispatch(getMessagesSuccess(resp.data))
             } 
             catch (error) {
@@ -83,7 +82,7 @@ class ChatService implements IChatService{
 
   public async getAllUsers():Promise<any> {
        try {
-           const res:AxiosResponse = await axios.get(`api/users/`)
+           const res:AxiosResponse = await axios.get(`/api/users/`)
             return res.data
        } catch (error) {
            console.log(error)
@@ -103,10 +102,6 @@ class ChatService implements IChatService{
         return async (dispatch: Dispatch<LoginSuccess | LoginFailur>) => {
             try {
                 let res = await axios.post<any>('/api/login', auth);
-                axios.interceptors.request.use(config => {
-                   config.headers && ( config.headers["Authorization"] = `Bearer ${res.data.token}`)
-                    return config
-                })
                 StorageHelper.saveToStorage('auth', {...res.data, isAuthenticated: true})
                 dispatch(loginSuccess(user))
             } catch (error) {

@@ -20,7 +20,22 @@
         } catch (error) {
             return undefined
         }
-}
+    }
+
+    static getLocalAccessToken() {
+        const auth = JSON.parse(localStorage.getItem('auth')!)
+        return auth?.token
+    }
+    static getLocalRefreshToken() {
+        const auth = JSON.parse(JSON.stringify("auth")!)
+        return auth?.refreshToken
+    }
+
+    static updateLocalAccessToken(token:string) {
+        const auth = JSON.parse(JSON.stringify("auth")!)
+        auth.token = token;
+        localStorage.setItem('auth', JSON.stringify(auth))
+    }
 }
 
 export default StorageHelper
