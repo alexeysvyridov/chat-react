@@ -58,7 +58,7 @@ export const Chat: React.FC = () => {
     }, [user._id])
     useEffect(() => {
         socketRef.current = io("ws://localhost:5000")
-        socketRef.current.on("getUsers", (data:any) => {
+        socketRef.current.on("getMessage", (data:any) => {
            setArrivalMessage({
                sender: data.senderid,
                text: data.text,
@@ -71,13 +71,15 @@ export const Chat: React.FC = () => {
     }, [])
     useEffect(() => {
        socketRef.current.emit("addUser", user._id)     
-    },[])
+    },[ user._id])
 
     useEffect(() => {
         arrivalMessage && currentChat?.members.includes(arrivalMessage.sender) &&
         dispatch(getMessagesSuccess([...messages, arrivalMessage]))
         // sendNewMessageSuccess((prev:any) => [...prev, arrivalMessage])
+        // console.log([...messages, arrivalMessage])
     }, [arrivalMessage, currentChat])
+    
     return (
         <div className={classes.root}>
             <div className={classes.messages}>

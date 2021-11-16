@@ -21,6 +21,7 @@ export const UserList: React.FC = () => {
     //     dispatch(chatService.getAllConversations(id))
     // }
     const setChat = (currChat: any) => {
+        setActiveTab(currChat._id)
         dispatch(setCurrentChat(currChat))
     }
 
