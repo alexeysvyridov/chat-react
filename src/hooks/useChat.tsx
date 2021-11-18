@@ -1,46 +1,47 @@
-import { useEffect, useState, useRef } from "react"
-import io from 'socket.io-client'
+import { useEffect, useState, useRef, useCallback } from "react"
+import io from 'socket.io-client';
 
-const SOCKET_SERVER_URL = 'http://localhost:4000'
-const NEW_CHAT_MESSAGE_EVENT = 'NEW_CHAT_MESSAGE_EVENT'
-const useChat = (roomId: string) => {
-    const [message, setMessage] = useState<any>([])
-    const socketRef: any = useRef()
+const SOCKET_SERVER_URL = 'ws://localhost:5000';
+
+const useChat = (userId:string) => {
+    const [arrivalMessage,setArrivalMessage] = useState<any>(null)
+    const socketRef: any = useRef(null)
 
     useEffect(() => {
-
-        socketRef.current = io(SOCKET_SERVER_URL, {
-            query: { roomId }
-        })
-
-        socketRef.current.on('connect', () => {
-            console.log('socket')
-        })
-        socketRef.current.message(NEW_CHAT_MESSAGE_EVENT, (message: any) => {
-            const incomingMessage = {
-                ...message,
-                ownedByCurrentUser: message.senderId === socketRef.current.id
-            }
-
-            setMessage((messages: any) => {
-                return [...messages, incomingMessage]
+        socketRef.current = io(SOCKET_SERVER_URL)
+        socketRef.current.on("getMessage", (data:any) => {
+            setArrivalMessage({
+                sender: data.senderId,
+                text: data.text,
+                createdAt: Date.now()
             })
-        })
+         })
+        return() => {
+            socketRef.current.disconnect()
+        }
+    }, [])
 
 
-        return () => {
-            socketRef.current.disconnect();
-        };
-    }, [roomId])
+    const addUserSocket = useCallback((id:string) => {
+        socketRef.current.emit("addUser", id)
+    },[]);
 
-    const sendMessage = (messageBody: any) => {
-        socketRef.current.emit(NEW_CHAT_MESSAGE_EVENT, {
-            body: messageBody,
-            senderId: socketRef.current.id,
+    useEffect(() => {
+        addUserSocket(userId)
+    }, [addUserSocket, userId])
+
+    const sendMessage = ({user, receiverId, newMessage}:any) => {
+        socketRef.current.emit("sendMessage", {
+            senderId: user._id,
+            receiverId,
+            text: newMessage
         })
     }
     return {
-        message,
+        socketRef,
+        addUserSocket,
+        arrivalMessage,
+        setArrivalMessage,
         sendMessage
     }
 }

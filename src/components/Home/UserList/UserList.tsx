@@ -17,14 +17,17 @@ export const UserList: React.FC = () => {
         setActiveTab(_id)
     }
 
-    // const getConverSation = (id: string) => {
-    //     dispatch(chatService.getAllConversations(id))
-    // }
+  useEffect(() => {
+    const getConverSation = () => {
+        dispatch(chatService.getAllConversations(user._id))
+    }
+    getConverSation()
+  },[user._id])
+  
     const setChat = (currChat: any) => {
         setActiveTab(currChat._id)
         dispatch(setCurrentChat(currChat))
     }
-
     if (conversations && conversations.length === 0) {
         return <h1>no data</h1>
     }
@@ -61,15 +64,32 @@ interface UserComponent {
 }
 
 const User = memo(({ curUser, onGetUser, activeTab, conversation }: UserComponent): any => {
+   const [user, setUser] = useState<any>({})
+    useEffect(() => {
+        const friendId =  conversation.members.find(m => m !== curUser._id)
+        const getuser = async () => {
+            try {
+                const res = await axios.get('/api/users?userId=' + friendId)
+                setUser(res.data)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        getuser()
+   },[])
+   if(!user?._id) {
+       return null
+   }
 
-    return (
-        <div className="user-container">
-            <div className={`user-box ${activeTab === conversation._id ? 'active-tab' : ''}`}>
-                <img className="user-image" src={`assets/images/${conversation.img}`} alt="user" />
-                <div className="user-name">
-                    {conversation.username}
-                </div>
+   return (
+    <div className="user-container">
+        <div className={`user-box ${activeTab === user._id ? 'active-tab' : ''}`}>
+            <img className="user-image" src={`assets/images/${user.img}`} alt="user" />
+            <div className="user-name">
+                {user.username}
             </div>
         </div>
-    )
+    </div>
+   )
+    
 })
