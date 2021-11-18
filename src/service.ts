@@ -3,7 +3,7 @@ import { Dispatch } from 'react'
 import { getConversationFetch, getConversationsFailur, getConversationsSuccess, getMessagesFuilur, getMessagesSuccess, sendNewMessageSuccess,  } from './components/Home/Chat/redux/conversationActionCreators'
 import { loginFailur, LoginFailur, loginSuccess, LoginSuccess, SignOutInt, signOutAction, UserAuth } from './components/Login/redux/loginActionCreators'
 import StorageHelper from './localStorage'
-import {Int_GetMessagesSucces, INT_GetConversationFailur, INT_GetConversationFetch, INT_GetConversationSuccess, Int_GetMessagesFailur, INT_SendNewMessageSuccess} from './ModelService/Models'
+import {Int_GetMessagesSucces, INT_GetConversationFailur, INT_GetConversationFetch, INT_GetConversationSuccess, Int_GetMessagesFailur, INT_SendNewMessageSuccess, UserInt} from './ModelService/Models'
 import ApiClient, { IApiClient } from './ApiClient'
 export type ActionsConversations = INT_GetConversationSuccess | INT_GetConversationFailur | INT_GetConversationFetch;
 export type ActionMessages = Int_GetMessagesSucces | Int_GetMessagesFailur | INT_GetConversationFetch;
@@ -103,7 +103,7 @@ class ChatService implements IChatService{
             try {
                 let res = await axios.post<any>('/api/login', auth);
                 StorageHelper.saveToStorage('auth', {...res.data, isAuthenticated: true})
-                dispatch(loginSuccess(user))
+                dispatch(loginSuccess(res.data))
             } catch (error) {
                 console.log(error)
                 dispatch(loginFailur())

@@ -30,7 +30,18 @@ router.get("/:userId",verifyToken, async (req, res) => {
   }
 });
 
-
+router.get('/find:firstUserId/:secondeuserId', async (req, res) => {
+  try {
+    const conversation = await Conversation.findOne({
+      members:{
+        $all: [req.params.firstUserId, req.params.secondeuserId]
+      }
+    })
+    res.status(200).json(conversation)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+})
 
 
 module.exports = router;

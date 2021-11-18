@@ -1,3 +1,4 @@
+import { UserInt } from "../../../ModelService/Models"
 import { LOGIN_FAILUR, LOGIN_SUCCESS, SIGN_OUT } from "./loginTypes"
 
 export interface UserAuth {
@@ -6,13 +7,13 @@ export interface UserAuth {
 } 
 export interface LoginSuccess {
     type: typeof LOGIN_SUCCESS,
-    payload: UserAuth
+    payload: UserInt
 }
 export interface LoginFailur {
     type: typeof LOGIN_FAILUR
 }
 
-export const loginSuccess = (user:UserAuth):LoginSuccess => {
+export const loginSuccess = (user:UserInt):LoginSuccess => {
     return {
         type: LOGIN_SUCCESS,
         payload: user

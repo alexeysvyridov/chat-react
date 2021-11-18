@@ -1,12 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {io, Socket} from 'socket.io-client'
 import { makeStyles } from '@material-ui/core';
 import './Chat.scss'
 import { useTypeSelector } from '../../../hooks/useTypeSelector';
 import { useTypeDispatch } from '../../../hooks/useTypeDispatch';
 import ChatService from '../../../service'
-import { UserInt } from '../../../ModelService/Models';
-import { getMessagesSuccess, sendNewMessageSuccess } from './redux/conversationActionCreators';
+import { getMessagesSuccess } from './redux/conversationActionCreators';
+import useChat from '../../../hooks/useChat';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -47,37 +46,19 @@ const useStyles = makeStyles((theme) => ({
 
 
 export const Chat: React.FC = () => {
-    const classes = useStyles()
+    const classes = useStyles();
     const { user }: any = useTypeSelector(root => root.loginReducer);
-    const dispatch = useTypeDispatch()
+    const dispatch = useTypeDispatch();
     const { currentChat, messages, loading } = useTypeSelector(root => root.conversationReducer);
-    const socketRef = useRef<any>(null)
-    const [arrivalMessage,setArrivalMessage] = useState<any>(null)
-    useEffect(() => {
-        dispatch(ChatService.getAllConversations(user._id))
-    }, [user._id])
-    useEffect(() => {
-        socketRef.current = io("ws://localhost:5000")
-        socketRef.current.on("getUsers", (data:any) => {
-           setArrivalMessage({
-               sender: data.senderid,
-               text: data.text,
-               createdAt: Date.now()
-           })
-        })
-        return() => {
-            socketRef.current.disconnect()
-        }
-    }, [])
-    useEffect(() => {
-       socketRef.current.emit("addUser", user._id)     
-    },[])
+    const {arrivalMessage, socketRef} = useChat(user._id);
 
     useEffect(() => {
         arrivalMessage && currentChat?.members.includes(arrivalMessage.sender) &&
         dispatch(getMessagesSuccess([...messages, arrivalMessage]))
         // sendNewMessageSuccess((prev:any) => [...prev, arrivalMessage])
+        // console.log([...messages, arrivalMessage])
     }, [arrivalMessage, currentChat])
+    
     return (
         <div className={classes.root}>
             <div className={classes.messages}>
@@ -95,14 +76,18 @@ export const Chat: React.FC = () => {
                 )}
             </div>
             <div className={classes.wrapperInput}>
-                <MessageBar user={user} currentChat={currentChat} socketRef={socketRef}/>
+                <MessageBar 
+                    user={user} 
+                    currentChat={currentChat} 
+                    socketRef={socketRef}
+                />
             </div>
         </div>
     )
 }
 
 
-function MessageBar({ user, currentChat, socketRef }: any): React.ReactElement {
+function MessageBar({ user, currentChat,socketRef }: any): React.ReactElement {
     const [newMessage, setNewMessage] = useState('');
     const dispatch = useTypeDispatch()
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -114,7 +99,7 @@ function MessageBar({ user, currentChat, socketRef }: any): React.ReactElement {
         }
         dispatch(ChatService.sendNewMessage(message))
         const receiverId = currentChat.members.find((member:string) => member !== user._id)
-        socketRef?.current.emit("sendMessage", {
+        socketRef.current.emit("sendMessage", {
             senderId: user._id,
             receiverId: receiverId,
             text: newMessage
@@ -141,7 +126,6 @@ function MessageBar({ user, currentChat, socketRef }: any): React.ReactElement {
 function Messages({currentChat, messages, loading, user}:any): React.ReactElement {
     const dispatch = useTypeDispatch()
     const scrollRef = useRef<HTMLDivElement>(null)
-    
     useEffect(() => {
         dispatch(ChatService.getAllMessages(currentChat._id))
     }, [currentChat._id]);
