@@ -1,10 +1,8 @@
+import { UserInt } from "../../../ModelService/Models"
 import { LoginFailur, LoginSuccess, SignOutInt } from "./loginActionCreators"
 import { LOGIN_FAILUR, LOGIN_SUCCESS, SIGN_OUT } from "./loginTypes"
 
-export type UserType = {
-    password: string,
-    username: string;
-    id: string;
+export interface UserType extends UserInt  {
     isAuthenticated:boolean;
 }
 interface InitialState {
