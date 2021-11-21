@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     userList: {
         borderRight: '1px solid black',
         minHeight: '100%',
-        height: `calc(100vh - 77px)`,
+        height: `calc(100vh - 90px)`,
         overflow: 'auto'
     }
 }));

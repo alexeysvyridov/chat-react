@@ -1,25 +1,28 @@
 .list-container {
     min-width: 255px;
     max-width: 100%;
-    .user-container {
-        padding: 10px 20px;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        .user-box {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            width: 100%;
-            .user-image {
-                height: 50px;
-                width: 50px;
-                border-radius: 50%;
-            }
-        }
-    }
+
     .active-tab{
         background-color: beige;
         pointer-events: cursor;
+    }
+}
+.user-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    .p-10 {
+        padding: 10px;
+    }
+    .user-box {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        width: 100%;
+        .user-image {
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+        }
     }
 }

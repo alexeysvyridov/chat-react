@@ -32,6 +32,9 @@ html, body  {
 body {
   font-size: 1.2rem;
   list-style: none;
+  li {
+    list-style: none;
+  }
 }
 a {
   text-decoration: none;
@@ -41,4 +44,9 @@ html, body, #root, .App{
 }
  .App, *, *::after, *::before {
   box-sizing: border-box;
+}
+
+
+svg, i, img, nav {
+  user-select: none;
 }

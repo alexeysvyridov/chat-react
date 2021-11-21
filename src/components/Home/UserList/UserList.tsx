@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { memo, useEffect, useState } from 'react'
+import { Fragment, memo, useEffect, useState } from 'react'
 import { useTypeDispatch } from '../../../hooks/useTypeDispatch';
 import { useTypeSelector } from '../../../hooks/useTypeSelector';
 import { ConversationInt, UserInt } from '../../../ModelService/Models';
@@ -45,7 +45,6 @@ export const UserList: React.FC = () => {
                             <User
                                 conversation={conversation}
                                 curUser={user}
-                                onGetUser={getUserHandler}
                                 activeTab={activeTab}
                             />
                         </li>
@@ -58,12 +57,11 @@ export const UserList: React.FC = () => {
 
 interface UserComponent {
     curUser: UserInt;
-    onGetUser: (_id: string) => void;
     activeTab: string;
     conversation: ConversationInt;
 }
 
-const User = memo(({ curUser, onGetUser, activeTab, conversation }: UserComponent): any => {
+const User = memo(({ curUser, activeTab, conversation }: UserComponent): any => {
    const [user, setUser] = useState<any>({})
     useEffect(() => {
         const friendId =  conversation.members.find(m => m !== curUser._id)
@@ -83,7 +81,7 @@ const User = memo(({ curUser, onGetUser, activeTab, conversation }: UserComponen
 
    return (
     <div className="user-container">
-        <div className={`user-box ${activeTab === user._id ? 'active-tab' : ''}`}>
+        <div className={`user-box p-10 ${activeTab === user._id ? 'active-tab' : ''}`}>
             <img className="user-image" src={`assets/images/${user.img}`} alt="user" />
             <div className="user-name">
                 {user.username}
