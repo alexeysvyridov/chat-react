@@ -6,6 +6,6 @@ export const UserImage = styled.img.attrs(
    }))`
 
    height: 50px;
-   heigth: 50px;
+   width: 50px;
    border-radius:${props => props.borderRadius ? props.borderRadius : '50%'};
 `

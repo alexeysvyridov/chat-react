@@ -42,3 +42,9 @@ html, body, #root, .App{
  .App, *, *::after, *::before {
   box-sizing: border-box;
 }
+
+body {
+  li {
+    list-style: none;
+  }
+}

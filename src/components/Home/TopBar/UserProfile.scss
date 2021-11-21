@@ -1,0 +1,38 @@
+.user-container {
+    .user-profile-wrapper{
+       position: relative;
+       .user-profile {
+        position: absolute;
+        width: 250px;
+        right: 50px;
+        height: auto;
+        min-height: 250px;
+        top: 25px;
+        border: 1px solid gray;
+        background-color: #fff;
+        border-radius: 15px;
+        z-index: 1;
+        .user-item {
+            color: gray;
+            cursor: pointer;
+            &:hover {
+                background-color: #F4F5F7;
+            }
+        }
+        .user-profile-body {
+            padding: 10px 15px;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            li {
+                padding: 10px 0px;
+                height: 40px;
+                border-bottom: 1px solid #fff;
+                &:hover {
+                    border-bottom: 1px solid gray;
+                }
+            }
+        }
+       }
+   }
+}

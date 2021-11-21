@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     messages: {
         overflow: 'scroll',
         overflowX: 'hidden',
-        height: `calc(100% - 60px)`,
+        height: `calc(100% - 90px)`,
         padding: '10px 0px'
     },
     MessageBar: {

@@ -6,4 +6,5 @@ export const Bar = styled.nav`
     width: 100%;
     padding: 1rem;
     color: #fff;
+    height: 90px;
 `
