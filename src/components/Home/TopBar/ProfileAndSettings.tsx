@@ -26,7 +26,7 @@ const ProfileAndSettings = ({signOutHandler}:Props):React.ReactElement => {
                 <li className="user-profile">
                     <ul className="user-profile-body">
                         <li className="user-item">Profile</li>
-                        <li className="user-item" onClick={signOutHandler}>Log out</li>
+                        <li className="user-item last" onClick={signOutHandler}>Log out</li>
                     </ul>
                 </li>
                 }

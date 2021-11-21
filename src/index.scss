@@ -32,6 +32,9 @@ html, body  {
 body {
   font-size: 1.2rem;
   list-style: none;
+  li {
+    list-style: none;
+  }
 }
 a {
   text-decoration: none;
@@ -43,8 +46,7 @@ html, body, #root, .App{
   box-sizing: border-box;
 }
 
-body {
-  li {
-    list-style: none;
-  }
+
+svg, i, img, nav {
+  user-select: none;
 }
