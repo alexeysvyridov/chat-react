@@ -27,6 +27,7 @@ export interface UserInt {
     username: string;
     email: string;
     __v?:number;
+    isOnline?: boolean;
 }
 
 export interface MessageInt {
